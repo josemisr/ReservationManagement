@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ReservationManagementApp.Models
 {
-    public partial class CTFMRESERVATIONMANAGEMENDDBMDFContext : DbContext
+    public partial class RESERVATIONMANAGEMENDDBMDFContext : DbContext
     {
-        public CTFMRESERVATIONMANAGEMENDDBMDFContext()
+        public RESERVATIONMANAGEMENDDBMDFContext()
         {
         }
 
-        public CTFMRESERVATIONMANAGEMENDDBMDFContext(DbContextOptions<CTFMRESERVATIONMANAGEMENDDBMDFContext> options)
+        public RESERVATIONMANAGEMENDDBMDFContext(DbContextOptions<RESERVATIONMANAGEMENDDBMDFContext> options)
             : base(options)
         {
         }
