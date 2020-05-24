@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ReservationManagementApp.Enum;
+using ReservationManagementApp.Authorize;
 using ReservationManagementApp.Models;
 
 namespace ReservationManagementApp.Controllers
 {
+    [Authorize(Policy = "Admin")]
     public class ServicesController : Controller
     {
         private readonly RESERVATIONMANAGEMENTDBMDFContext _context;

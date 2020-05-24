@@ -11,6 +11,9 @@ using Microsoft.Extensions.Hosting;
 using ReservationManagementApp.Models;
 using Microsoft.AspNetCore.Http;
 using SolucionMonolitica.Filters;
+using ReservationManagementApp.Authorize;
+using Microsoft.AspNetCore.Authorization;
+using ReservationManagementApp.Enum;
 
 namespace ReservationManagementApp
 {
@@ -28,13 +31,23 @@ namespace ReservationManagementApp
         {
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddDbContext<RESERVATIONMANAGEMENTDBMDFContext>();
+          
             services.AddControllersWithViews(options =>
             {
                 options.Filters.Add(typeof(VerifySession));
+               // options.Filters.Add(typeof(CustomAuthFilter));
             });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(RolesAuthorize.Admin.ToString(), policy => policy.Requirements.Add(new RolesAuthorizeRequirement((int)RolesAuthorize.Admin)));
+                options.AddPolicy(RolesAuthorize.Client.ToString(), policy => policy.Requirements.Add(new RolesAuthorizeRequirement((int)RolesAuthorize.Client)));
+            });
+
+            services.AddSingleton<IAuthorizationHandler, RoleAuthorizeHandler>();
+
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.IdleTimeout = TimeSpan.FromSeconds(100);
             });
             services.AddRazorPages();
         }
@@ -42,9 +55,11 @@ namespace ReservationManagementApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+       
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler("/Home/Error");
                 app.UseDatabaseErrorPage();
             }
             else
@@ -54,13 +69,16 @@ namespace ReservationManagementApp
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthentication();
+            app.UseSession();//Orden importante, para que pueda ser usada en el Authorization (policy)
             app.UseAuthorization();
-            app.UseSession();
+           
+           
 
             app.UseEndpoints(endpoints =>
             {
