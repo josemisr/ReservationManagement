@@ -4,17 +4,16 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ReservationManagementApp.Models
 {
-    public partial class RESERVATIONMANAGEMENDDBMDFContext : DbContext
+    public partial class RESERVATIONMANAGEMENTDBMDFContext : DbContext
     {
-        public RESERVATIONMANAGEMENDDBMDFContext()
+        public RESERVATIONMANAGEMENTDBMDFContext()
         {
         }
 
-        public RESERVATIONMANAGEMENDDBMDFContext(DbContextOptions<RESERVATIONMANAGEMENDDBMDFContext> options)
+        public RESERVATIONMANAGEMENTDBMDFContext(DbContextOptions<RESERVATIONMANAGEMENTDBMDFContext> options)
             : base(options)
         {
         }
-
         public virtual DbSet<Employees> Employees { get; set; }
         public virtual DbSet<EmployeesShifts> EmployeesShifts { get; set; }
         public virtual DbSet<Reservations> Reservations { get; set; }
@@ -36,8 +35,6 @@ namespace ReservationManagementApp.Models
         {
             modelBuilder.Entity<Employees>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.IdCard)
                     .IsRequired()
                     .HasMaxLength(20);
@@ -64,8 +61,6 @@ namespace ReservationManagementApp.Models
 
             modelBuilder.Entity<Reservations>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
                 entity.HasOne(d => d.IdEmployeeNavigation)
@@ -89,8 +84,6 @@ namespace ReservationManagementApp.Models
 
             modelBuilder.Entity<Roles>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Descripción).HasMaxLength(250);
 
                 entity.Property(e => e.Name).HasMaxLength(50);
@@ -98,8 +91,6 @@ namespace ReservationManagementApp.Models
 
             modelBuilder.Entity<Services>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Description)
                     .HasMaxLength(250)
                     .IsFixedLength();
@@ -128,9 +119,7 @@ namespace ReservationManagementApp.Models
 
             modelBuilder.Entity<Users>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.Birthday).HasColumnType("datetime");
+                entity.Property(e => e.Birthday).HasColumnType("date");
 
                 entity.Property(e => e.Email)
                     .IsRequired()
@@ -151,6 +140,12 @@ namespace ReservationManagementApp.Models
                 entity.Property(e => e.Surname).HasMaxLength(50);
 
                 entity.Property(e => e.Surname2).HasMaxLength(50);
+
+                entity.HasOne(d => d.IdRoleNavigation)
+                    .WithMany(p => p.Users)
+                    .HasForeignKey(d => d.IdRole)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Users_Roles");
             });
 
             OnModelCreatingPartial(modelBuilder);
@@ -159,3 +154,4 @@ namespace ReservationManagementApp.Models
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
+

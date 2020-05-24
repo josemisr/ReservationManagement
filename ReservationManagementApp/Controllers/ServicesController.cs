@@ -11,9 +11,9 @@ namespace ReservationManagementApp.Controllers
 {
     public class ServicesController : Controller
     {
-        private readonly RESERVATIONMANAGEMENDDBMDFContext _context;
+        private readonly RESERVATIONMANAGEMENTDBMDFContext _context;
 
-        public ServicesController(RESERVATIONMANAGEMENDDBMDFContext context)
+        public ServicesController(RESERVATIONMANAGEMENTDBMDFContext context)
         {
             _context = context;
         }

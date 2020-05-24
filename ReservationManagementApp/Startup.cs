@@ -4,15 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.EntityFrameworkCore;
-using ReservationManagementApp.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ReservationManagementApp.Models;
+using Microsoft.AspNetCore.Http;
+using SolucionMonolitica.Filters;
 
 namespace ReservationManagementApp
 {
@@ -28,13 +26,16 @@ namespace ReservationManagementApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<RESERVATIONMANAGEMENDDBMDFContext>();
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddControllersWithViews();
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddDbContext<RESERVATIONMANAGEMENTDBMDFContext>();
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(typeof(VerifySession));
+            });
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+            });
             services.AddRazorPages();
         }
 
@@ -59,6 +60,7 @@ namespace ReservationManagementApp
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
