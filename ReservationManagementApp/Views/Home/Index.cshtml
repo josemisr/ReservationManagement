@@ -2,7 +2,46 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="jumbotron">
+    <h1>Welcome to the Reservation Manager App. Demo </h1>
+    <p class="lead">This Demo page is made with a Monolithic Solution.</p>
+    <p> <a asp-area="" asp-controller="Home" asp-action="Error">Get a Reservation</a></p>
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>About Project</h2>
+        <p>
+            This application is a monolithic solution, made as part of a project that aims to show the evolution from a monolithic solution to a Based FaaS solution.
+            <br />
+            <br />
+            the different solutions are:
+            <br />
+            •	Monolithic Arquitecture
+            <br />
+            •	Three layers Arquitecture
+            <br />
+            •	Microservices Arquitecture
+            <br />
+            •	Based on FaaS solution
+            <br />
+            <br />
+            Github Repository: <a class="text-dark" href="https://github.com/josemisr/ReservationManagement"> https://github.com/josemisr/ReservationManagement</a>
+        </p>
+        <p> <a asp-area="" asp-controller="Home" asp-action="Project">Learn about project</a></p>
+
+    </div>
+    <div class="col-md-6">
+        <h2>About me</h2>
+        <p>
+            Senior .Net Programmer analyst (Full Stack). Graduated in Computer Engineering From Universidad Politécnica de Madrid and Master student in Web Engineering at Universidad Politecnica de Madrid.
+            <br />
+            <br />
+            I have experience working on projects for big companies like FCC, Iberdrola or Enagas. 
+            For the back end I have worked with different microsoft frameworks such as ASP .Net Core, ASP .Framework or WinForms with different architectures (MVC 5, MVC Core, Microservices) and different languages ​​(C #, VB).
+            For the frontend I have worked with Angular, AngularJS, Jquery, Javascript, Html, CSS and Bootstrap.
+        </p>
+        <p> <a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></p>
+    </div>
 </div>

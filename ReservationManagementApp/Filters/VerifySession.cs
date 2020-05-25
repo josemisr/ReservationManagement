@@ -19,7 +19,7 @@ namespace SolucionMonolitica.Filters
             base.OnActionExecuting(filterContext);
             if (string.IsNullOrEmpty(_httpContextAccessor.HttpContext.Session.GetString("User")))
             {
-                if (filterContext.Controller is AccountController == false)
+                if (filterContext.Controller is AccountController == false && filterContext.Controller is HomeController == false)
                     filterContext.HttpContext.Response.Redirect("/Account/Login");
             }
         }
