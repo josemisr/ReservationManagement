@@ -19,9 +19,9 @@ namespace ReservationManagementApp.Controllers
     //[Authorize]
     public class AccountController : Controller
     {
-        private readonly RESERVATIONMANAGEMENTDBMDFContext _context;
+        private readonly ReservationManagementDbContext _context;
 
-        public AccountController(RESERVATIONMANAGEMENTDBMDFContext context)
+        public AccountController(ReservationManagementDbContext context)
         {
             _context = context;
         }

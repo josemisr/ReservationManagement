@@ -15,9 +15,9 @@ namespace ReservationManagementApp.Controllers
     [Authorize(Policy = "Admin")]
     public class ServicesController : Controller
     {
-        private readonly RESERVATIONMANAGEMENTDBMDFContext _context;
+        private readonly ReservationManagementDbContext _context;
 
-        public ServicesController(RESERVATIONMANAGEMENTDBMDFContext context)
+        public ServicesController(ReservationManagementDbContext context)
         {
             _context = context;
         }

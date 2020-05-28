@@ -30,7 +30,7 @@ namespace ReservationManagementApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddDbContext<RESERVATIONMANAGEMENTDBMDFContext>();
+            services.AddDbContext<ReservationManagementDbContext>();
           
             services.AddControllersWithViews(options =>
             {

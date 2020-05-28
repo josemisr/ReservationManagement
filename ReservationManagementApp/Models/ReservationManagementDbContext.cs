@@ -4,16 +4,17 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ReservationManagementApp.Models
 {
-    public partial class RESERVATIONMANAGEMENTDBMDFContext : DbContext
+    public partial class ReservationManagementDbContext : DbContext
     {
-        public RESERVATIONMANAGEMENTDBMDFContext()
+        public ReservationManagementDbContext()
         {
         }
 
-        public RESERVATIONMANAGEMENTDBMDFContext(DbContextOptions<RESERVATIONMANAGEMENTDBMDFContext> options)
+        public ReservationManagementDbContext(DbContextOptions<ReservationManagementDbContext> options)
             : base(options)
         {
         }
+
         public virtual DbSet<Employees> Employees { get; set; }
         public virtual DbSet<EmployeesShifts> EmployeesShifts { get; set; }
         public virtual DbSet<Reservations> Reservations { get; set; }
@@ -27,7 +28,7 @@ namespace ReservationManagementApp.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\TFM\\ReservationManagemendDb.mdf;Integrated Security=True;Connect Timeout=30");
+                optionsBuilder.UseSqlServer("Server=tcp:reservationmanagement.database.windows.net,1433;Initial Catalog=ReservationManagementDb;Persist Security Info=False;User ID=josemi91;Password=Gemma95-;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 
@@ -154,4 +155,3 @@ namespace ReservationManagementApp.Models
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
-
