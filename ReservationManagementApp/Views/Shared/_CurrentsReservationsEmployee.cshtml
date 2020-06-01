@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ReservationManagementApp.Models.Reservations>
+
+@if (Model.Count() > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    Employee @Html.DisplayNameFor(model => model.IdEmployeeNavigation.Name)
+                </th>
+                <th>
+                    Service  @Html.DisplayNameFor(model => model.IdServiceNavigation.Name)
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IdEmployeeNavigation.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IdServiceNavigation.Name)
+                    </td>
+                    <td>
+                        <form asp-action="Create">
+                            <input hidden="hidden" name="IdEmployee" value="@item.IdEmployee" />
+                            <input hidden="hidden" name="IdService" value="@item.IdService" />
+                            <input hidden="hidden" type="datetime" name="Date" value="@item.Date" />
+                            <input type="submit" value="Make a Reservation" />
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

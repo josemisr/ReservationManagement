@@ -1,0 +1,34 @@
+﻿@model ReservationManagementApp.Models.Reservation.ReservationModel
+
+<h1>Reservation</h1>
+
+<h4>Get a Reservation</h4>
+<hr />
+<div>
+    <form asp-action="New">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group row">
+            <div class="col-md-6">
+                <label asp-for="Reservation.Date" class="control-label"></label>
+                <input asp-for="Reservation.Date" type="date" class="form-control" />
+                <span asp-validation-for="Reservation.Date" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Reservation.IdService" class="control-label"></label>
+                <select asp-for="Reservation.IdService" class="form-control" asp-items="ViewBag.IdService"></select>
+                <span asp-validation-for="Reservation.IdService" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="New Reservation" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+<br />
+<br />
+<h4>My reservations</h4>
+<hr />
+<div>
+    <partial name="_CurrentsReservationsUser" for="Reservations" />
+</div>

@@ -51,7 +51,7 @@ namespace ReservationManagementApp.Models
 
             modelBuilder.Entity<EmployeesShifts>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.WorkDay).HasColumnType("datetime");
 
                 entity.HasOne(d => d.IdEmployeeNavigation)
                     .WithMany(p => p.EmployeesShifts)
@@ -103,8 +103,6 @@ namespace ReservationManagementApp.Models
 
             modelBuilder.Entity<ServicesEmployees>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.HasOne(d => d.IdEmployeeNavigation)
                     .WithMany(p => p.ServicesEmployees)
                     .HasForeignKey(d => d.IdEmployee)

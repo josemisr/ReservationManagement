@@ -1,0 +1,51 @@
+﻿@model ReservationManagementApp.Models.Reservation.ReservationModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Reservations</h4>
+<hr />
+<div class="row">
+
+    <div class="col-md-4">
+        <form asp-action="New">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Reservation.Date" class="control-label"></label>
+                <input type="date" asp-for="Reservation.Date" class="form-control" readonly="readonly" />
+                <span asp-validation-for="Reservation.Date" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Reservation.IdServiceNavigation.Name" class="control-label"></label>
+                <input asp-for="Reservation.IdServiceNavigation.Name" class="form-control" readonly="readonly">
+            </div>
+
+            <div hidden="hidden" class="form-group">
+                <label asp-for="Reservation.IdService" class="control-label"></label>
+                <input asp-for="Reservation.IdService" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Reservation.IdEmployee" class="control-label"></label>
+                <select asp-for="Reservation.IdEmployee" class="form-control" asp-items="ViewBag.IdEmployee"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Search Employee" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    <div class="col-md-8">
+        <partial name="_CurrentsReservationsEmployee" for="Reservations" />
+    </div>
+</div>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
