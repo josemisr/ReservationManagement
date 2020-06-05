@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using ReservationManagementApp.Enum;
 using ReservationManagementApp.Authorize;
 using ReservationManagementApp.Models;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace ReservationManagementApp.Controllers
 {
@@ -57,15 +59,26 @@ namespace ReservationManagementApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,DurationHours,Description")] Services services)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,Image,Description")] Services service, [FromForm] IFormFile Image)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(services);
+                if (Image != null)
+                {
+                    //upload files to wwwroot
+                    var fileName = Path.GetFileName(Image.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/Resources/", "Images", fileName);
+                    service.Image = "/Resources/Images/" + fileName;
+                    using (var fileSteam = new FileStream(filePath, FileMode.Create))
+                    {
+                        await Image.CopyToAsync(fileSteam);
+                    }
+                }
+                _context.Add(service);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(services);
+            return View(service);
         }
 
         // GET: Services/Edit/5
@@ -89,9 +102,9 @@ namespace ReservationManagementApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,DurationHours,Description")] Services services)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Image,Description")] Services service, IFormFile Image)
         {
-            if (id != services.Id)
+            if (id != service.Id)
             {
                 return NotFound();
             }
@@ -100,12 +113,23 @@ namespace ReservationManagementApp.Controllers
             {
                 try
                 {
-                    _context.Update(services);
+                    if (Image != null)
+                    {
+                        //upload files to wwwroot
+                        var fileName = Path.GetFileName(Image.FileName);
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/Resources/", "Images", fileName);
+                        service.Image = "/Resources/Images/" + fileName;
+                        using (var fileSteam = new FileStream(filePath, FileMode.Create))
+                        {
+                            await Image.CopyToAsync(fileSteam);
+                        }
+                    }
+                    _context.Update(service);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ServicesExists(services.Id))
+                    if (!ServicesExists(service.Id))
                     {
                         return NotFound();
                     }
@@ -116,7 +140,7 @@ namespace ReservationManagementApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(services);
+            return View(service);
         }
 
         // GET: Services/Delete/5
@@ -152,5 +176,7 @@ namespace ReservationManagementApp.Controllers
         {
             return _context.Services.Any(e => e.Id == id);
         }
+
+
     }
 }

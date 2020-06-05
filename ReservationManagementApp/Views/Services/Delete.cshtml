@@ -24,10 +24,17 @@
             @Html.DisplayFor(model => model.Price)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DurationHours)
+            @Html.DisplayNameFor(model => model.Image)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DurationHours)
+        <dd class="col-sm-10">
+            @if (Model.Image != null)
+            {
+                <img id="fileName" src="@Model.Image" alt="Image" width="200" height="200" />
+            }
+            else
+            {
+                <img id="fileName" src="~/Resources/Images/not-available.png" alt="Image" width="200" height="200" />
+            }
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Description)

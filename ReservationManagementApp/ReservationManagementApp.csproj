@@ -24,4 +24,10 @@
     <Folder Include="Data\" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <None Include="wwwroot\Resources\Images\Captura.PNG" />
+    <None Include="wwwroot\Resources\Images\_DSC0291.JPG" />
+  </ItemGroup>
+
 </Project>

@@ -96,6 +96,8 @@ namespace ReservationManagementApp.Models
                     .HasMaxLength(250)
                     .IsFixedLength();
 
+                entity.Property(e => e.Image).HasMaxLength(250);
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(30);

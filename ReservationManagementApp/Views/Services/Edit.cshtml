@@ -9,8 +9,8 @@
 <h4>Services</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div class="col-md-6">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -23,10 +23,21 @@
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="DurationHours" class="control-label"></label>
-                <input asp-for="DurationHours" class="form-control" />
-                <span asp-validation-for="DurationHours" class="text-danger"></span>
+                <label asp-for="Image" class="control-label"></label>
+                <br />
+                @if (Model.Image != null)
+                {
+                    <img id="fileName" src="@Model.Image" alt="Image" width="200" height="200" />
+                }
+                else
+                {
+                    <img id="fileName" src="~/Resources/Images/not-available.png" alt="Image" width="200" height="200" />
+                }
+
+                <input type="file" asp-for="Image" class="form-control" onchange="loadFile(event)" />
+                <span asp-validation-for="Image" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
@@ -36,13 +47,26 @@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
+
+
         </form>
     </div>
 </div>
-
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script>
+    var loadFile = function (event) {
+        var fileReader = new FileReader();
+        fileReader.onload = function () {
+            var fileName = document.getElementById('fileName');
+            fileName.src = fileReader.result;
+        };
+        fileReader.readAsDataURL(event.target.files[0]);
+    };
+</script>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

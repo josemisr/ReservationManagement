@@ -15,6 +15,9 @@
                     Service  @Html.DisplayNameFor(model => model.IdServiceNavigation.Name)
                 </th>
                 <th>
+                    Service  @Html.DisplayNameFor(model => model.IdServiceNavigation.Image)
+                </th>
+                <th>
                     Action
                 </th>
             </tr>
@@ -33,6 +36,17 @@
                         @Html.DisplayFor(modelItem => item.IdServiceNavigation.Name)
                     </td>
                     <td>
+                        @if (item.IdServiceNavigation.Image != null)
+                        {
+                            <img class="zoom" src="@item.IdServiceNavigation.Image" alt="Image" />
+                        }
+                        else
+                        {
+                            <img class="zoom" src="~/Resources/Images/not-available.png" alt="Image"/>
+                        }
+
+                    </td>
+                    <td>
                         <form asp-action="Create">
                             <input hidden="hidden" name="IdEmployee" value="@item.IdEmployee" />
                             <input hidden="hidden" name="IdService" value="@item.IdService" />
@@ -44,5 +58,7 @@
             }
         </tbody>
     </table>
-}
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
 
+}
