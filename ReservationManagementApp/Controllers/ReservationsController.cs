@@ -29,7 +29,7 @@ namespace ReservationManagementApp.Controllers
             if (TempData["Date"] != null && !String.IsNullOrEmpty(TempData["Date"].ToString()))
                 ModelState.AddModelError("reservation.Date", TempData["Date"].ToString());
 
-            if (TempData["IdService"]!= null && !String.IsNullOrEmpty(TempData["IdService"].ToString()))
+            if (TempData["IdService"] != null && !String.IsNullOrEmpty(TempData["IdService"].ToString()))
                 ModelState.AddModelError("reservation.IdService", TempData["IdService"].ToString());
 
             TempData.Clear();
@@ -38,9 +38,10 @@ namespace ReservationManagementApp.Controllers
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
             {
                 Users user = JsonSerializer.Deserialize<Users>(HttpContext.Session.GetString("User"));
-                reservationModel.Reservations = _context.Reservations.Where(elem => elem.IdUser ==user.Id);
+                reservationModel.Reservations = _context.Reservations.Where(elem => elem.IdUser == user.Id).Include(r => r.IdEmployeeNavigation)
+                .Include(r => r.IdServiceNavigation);
             }
-           
+
             return View(reservationModel);
         }
 
@@ -110,7 +111,7 @@ namespace ReservationManagementApp.Controllers
         {
             List<Reservations> currentReservations = GetCurrentsReservations(reservation);
             List<Reservations> possibleReservations = GetPossibleReservations(reservation);
-            possibleReservations = possibleReservations.Where(elem => currentReservations.FirstOrDefault(elem2=> elem.Date == elem2.Date) == null ).ToList();
+            possibleReservations = possibleReservations.Where(elem => currentReservations.FirstOrDefault(elem2 => elem.Date == elem2.Date) == null).ToList();
             return possibleReservations;
         }
 
@@ -118,7 +119,7 @@ namespace ReservationManagementApp.Controllers
         {
             List<Reservations> currentReservations = _context.Reservations
                .Where(elem => elem.IdEmployee == reservation.IdEmployee &&
-               elem.Date.Date == reservation.Date.Date && elem.IdService == reservation.IdService).ToList();
+               elem.Date.Date == reservation.Date.Date).ToList();
             return currentReservations;
         }
 
