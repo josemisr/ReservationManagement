@@ -1,0 +1,75 @@
+﻿@model ReservationManagementApp.Models.ServiceEmployeeModel.ServiceEmployeeModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Employee Services Management</h1>
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="ServicesEmployee.IdEmployeeNavigation.Name" class="control-label"></label>
+        <input asp-for="ServicesEmployee.IdEmployeeNavigation.Name" class="form-control" disabled="disabled" />
+        <input asp-for="ServicesEmployee.IdEmployee" class="form-control" hidden="hidden" />
+    </div>
+    <div class="form-group">
+        <label class="control-label">Service</label>
+        <select asp-for="ServicesEmployee.IdService" class="form-control" asp-items="ViewBag.IdService" onchange="hideMessageError()"></select>
+    </div>
+    <div id="messageError" class="text-danger">
+        @Html.ValidationMessage("Error")
+        <br />
+    </div>
+    <div class="form-group">
+        <div class="form-group ">
+            <input type="submit" value="Add" class="btn btn-primary" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <a asp-controller="Employees" asp-action="Edit" asp-route-id=@Model.ServicesEmployee.IdEmployee>Edit Employee</a>
+        </div>
+        <div class="col-md-4">
+            <a asp-controller="EmployeesShifts" asp-action="Index" asp-route-idEmployee=@Model.ServicesEmployee.IdEmployee>Shifts Management</a>
+        </div>
+    </div>
+</form>
+<br />
+
+<h4>Associated Services</h4>
+<hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Employee @Html.DisplayNameFor(model => model.ServicesEmployee.IdEmployeeNavigation.Name)
+            </th>
+            <th>
+                Service @Html.DisplayNameFor(model => model.ServicesEmployee.IdServiceNavigation.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ServicesEmployees)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdEmployeeNavigation.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdServiceNavigation.Name)
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    function hideMessageError() {
+        document.getElementById('messageError').style.visibility = "hidden";
+    }
+</script>

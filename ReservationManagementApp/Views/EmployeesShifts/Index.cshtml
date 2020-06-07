@@ -1,0 +1,134 @@
+﻿@model ReservationManagementApp.Models.EmployeeShiftModel.EmployeeShiftModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Employee Shifts Management</h1>
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="EmployeeShifts.IdEmployeeNavigation.Name" class="control-label"></label>
+                <input asp-for="EmployeeShifts.IdEmployeeNavigation.Name" class="form-control" disabled="disabled" />
+                <input asp-for="EmployeeShifts.IdEmployee" class="form-control" hidden="hidden" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label  class="control-label">Work Day</label>
+                <input type="date" asp-for="EmployeeShifts.WorkDay" class="form-control" onchange="hideMessageError()" />
+                <span asp-validation-for="EmployeeShifts.WorkDay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Init Hour</label>
+                <input asp-for="EmployeeShifts.InitHour" class="form-control" onchange="hideMessageError()" />
+                <span asp-validation-for="EmployeeShifts.InitHour" class="text-danger"></span>
+            </div>
+
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label">End Date</label>
+                <input type="date" asp-for="EndDate" class="form-control" onchange="hideMessageError()" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">End Hour</label>
+                <input asp-for="EmployeeShifts.EndHour" class="form-control" onchange="hideMessageError()" />
+                <span asp-validation-for="EmployeeShifts.EndHour" class="text-danger"></span>
+            </div>
+        </div>
+        <div id="messageError" class="text-danger">
+            @if (ViewData.ModelState["ErrorDate"] != null)
+            {
+                @Html.ValidationMessage("ErrorDate")
+                <br />
+            }
+            @if (ViewData.ModelState["ErrorHours"] != null)
+            {
+                @Html.ValidationMessage("ErrorHours")
+                <br />
+            }
+            @if (ViewData.ModelState["ErrorSameHour"] != null)
+            {
+                @Html.ValidationMessage("ErrorSameHour")
+                <br />
+            }
+            @if (ViewData.ModelState["ErrorInitHour"] != null)
+            {
+                @Html.ValidationMessage("ErrorInitHour")
+                <br />
+            }
+            @if (ViewData.ModelState["ErrorEndHour"] != null)
+            {
+                @Html.ValidationMessage("ErrorEndHour")
+                <br />
+            }
+            @if (ViewData.ModelState["Error"] != null)
+            {
+                @Html.ValidationMessage("Error")
+                <br />
+            }
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="form-group">
+            <input type="submit" value="Add" class="btn btn-primary" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <a asp-controller="Employees" asp-action="Edit" asp-route-id=@Model.EmployeeShifts.IdEmployee>Edit Employee</a>
+        </div>
+        <div class="col-md-4">
+            <a asp-controller="ServicesEmployees" asp-action="Index" asp-route-idEmployee=@Model.EmployeeShifts.IdEmployee>Services Management</a>
+        </div>
+    </div>
+</form>
+<br />
+
+<h4>Employee Shifts</h4>
+<hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Work Day
+            </th>
+            <th>
+                Init Hour
+            </th>
+            <th>
+                End Hour
+            </th>
+            <th>
+                Employee Name
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.EmployeesShifts)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WorkDay)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InitHour)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndHour)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdEmployeeNavigation.Name)
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

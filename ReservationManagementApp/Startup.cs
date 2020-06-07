@@ -47,7 +47,7 @@ namespace ReservationManagementApp
 
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(100);
+                options.IdleTimeout = TimeSpan.FromSeconds(600);
             });
             services.AddRazorPages();
         }
