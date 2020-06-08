@@ -27,13 +27,13 @@ namespace ReservationManagementApp.Controllers
             if (TempData["Error"] != null && !String.IsNullOrEmpty(TempData["Error"].ToString()))
                 ModelState.AddModelError("Error", TempData["Error"].ToString());
             TempData.Clear();
-            var servicesEmployeesList = _context.ServicesEmployees.Where(elem => elem.IdEmployee == idEmployee).Include(s => s.IdEmployeeNavigation).Include(s => s.IdServiceNavigation);
+            var reservationManagementDbContext = _context.ServicesEmployees.Where(elem => elem.IdEmployee == idEmployee).Include(s => s.IdEmployeeNavigation).Include(s => s.IdServiceNavigation);
             ViewData["IdService"] = new SelectList(_context.Services, "Id", "Name");
             ServiceEmployeeModel serviceEmployeeModel = new ServiceEmployeeModel();
-            serviceEmployeeModel.ServicesEmployeesList = servicesEmployeesList;
-            serviceEmployeeModel.ServiceEmployee = new ServicesEmployees();
-            serviceEmployeeModel.ServiceEmployee.IdEmployeeNavigation = _context.Employees.FirstOrDefault(elem => elem.Id == idEmployee.Value);
-            serviceEmployeeModel.ServiceEmployee.IdEmployee = idEmployee.Value;
+            serviceEmployeeModel.ServicesEmployees = reservationManagementDbContext;
+            serviceEmployeeModel.ServicesEmployee = new ServicesEmployees();
+            serviceEmployeeModel.ServicesEmployee.IdEmployeeNavigation = _context.Employees.FirstOrDefault(elem => elem.Id == idEmployee.Value);
+            serviceEmployeeModel.ServicesEmployee.IdEmployee = idEmployee.Value;
             return View(serviceEmployeeModel);
         }
 
@@ -45,8 +45,8 @@ namespace ReservationManagementApp.Controllers
         public async Task<IActionResult> Create(ServiceEmployeeModel serviceEmployeeModel)
         {
             ServicesEmployees servicesEmployee = new ServicesEmployees();
-            servicesEmployee.IdEmployee = serviceEmployeeModel.ServiceEmployee.IdEmployee;
-            servicesEmployee.IdService = serviceEmployeeModel.ServiceEmployee.IdService;
+            servicesEmployee.IdEmployee = serviceEmployeeModel.ServicesEmployee.IdEmployee;
+            servicesEmployee.IdService = serviceEmployeeModel.ServicesEmployee.IdService;
             if (_context.ServicesEmployees.FirstOrDefault(elem => elem.IdEmployee == servicesEmployee.IdEmployee && elem.IdService == servicesEmployee.IdService) != null)
             {
                 TempData["Error"] = "This services is assigned";
@@ -55,7 +55,7 @@ namespace ReservationManagementApp.Controllers
                     idEmployee = servicesEmployee.IdEmployee
                 });
             }
-            if (serviceEmployeeModel.ServiceEmployee.IdService != 0)
+            if (serviceEmployeeModel.ServicesEmployee.IdService != 0)
             {
                 _context.Add(servicesEmployee);
                 await _context.SaveChangesAsync();
@@ -65,6 +65,7 @@ namespace ReservationManagementApp.Controllers
                 });
             }
 
+            ViewData["IdEmployee"] = new SelectList(_context.Employees, "Id", "IdCard", servicesEmployee.IdEmployee);
             ViewData["IdService"] = new SelectList(_context.Services, "Id", "Name", servicesEmployee.IdService);
             return RedirectToAction(nameof(Index), new
             {

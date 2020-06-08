@@ -11,21 +11,21 @@
     <div class="row">
         <div class="col-md-4">
             <div class="form-group">
-                <label asp-for="EmployeeShift.IdEmployeeNavigation.Name" class="control-label"></label>
-                <input asp-for="EmployeeShift.IdEmployeeNavigation.Name" class="form-control" disabled="disabled" />
-                <input asp-for="EmployeeShift.IdEmployee" class="form-control" hidden="hidden" />
+                <label asp-for="EmployeeShifts.IdEmployeeNavigation.Name" class="control-label"></label>
+                <input asp-for="EmployeeShifts.IdEmployeeNavigation.Name" class="form-control" disabled="disabled" />
+                <input asp-for="EmployeeShifts.IdEmployee" class="form-control" hidden="hidden" />
             </div>
         </div>
         <div class="col-md-4">
             <div class="form-group">
                 <label  class="control-label">Work Day</label>
-                <input type="date" asp-for="EmployeeShift.WorkDay" class="form-control" onchange="hideMessageError()" />
-                <span asp-validation-for="EmployeeShift.WorkDay" class="text-danger"></span>
+                <input type="date" asp-for="EmployeeShifts.WorkDay" class="form-control" onchange="hideMessageError()" />
+                <span asp-validation-for="EmployeeShifts.WorkDay" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label">Init Hour</label>
-                <input asp-for="EmployeeShift.InitHour" class="form-control" onchange="hideMessageError()" />
-                <span asp-validation-for="EmployeeShift.InitHour" class="text-danger"></span>
+                <input asp-for="EmployeeShifts.InitHour" class="form-control" onchange="hideMessageError()" />
+                <span asp-validation-for="EmployeeShifts.InitHour" class="text-danger"></span>
             </div>
 
         </div>
@@ -36,8 +36,8 @@
             </div>
             <div class="form-group">
                 <label class="control-label">End Hour</label>
-                <input asp-for="EmployeeShift.EndHour" class="form-control" onchange="hideMessageError()" />
-                <span asp-validation-for="EmployeeShift.EndHour" class="text-danger"></span>
+                <input asp-for="EmployeeShifts.EndHour" class="form-control" onchange="hideMessageError()" />
+                <span asp-validation-for="EmployeeShifts.EndHour" class="text-danger"></span>
             </div>
         </div>
         <div id="messageError" class="text-danger">
@@ -80,10 +80,10 @@
     </div>
     <div class="row">
         <div class="col-md-4">
-            <a asp-controller="Employees" asp-action="Edit" asp-route-id=@Model.EmployeeShift.IdEmployee>Edit Employee</a>
+            <a asp-controller="Employees" asp-action="Edit" asp-route-id=@Model.EmployeeShifts.IdEmployee>Edit Employee</a>
         </div>
         <div class="col-md-4">
-            <a asp-controller="ServicesEmployees" asp-action="Index" asp-route-idEmployee=@Model.EmployeeShift.IdEmployee>Services Management</a>
+            <a asp-controller="ServicesEmployees" asp-action="Index" asp-route-idEmployee=@Model.EmployeeShifts.IdEmployee>Services Management</a>
         </div>
     </div>
 </form>
@@ -110,7 +110,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.EmployeeShiftsList)
+        @foreach (var item in Model.EmployeesShifts)
         {
             <tr>
                 <td>

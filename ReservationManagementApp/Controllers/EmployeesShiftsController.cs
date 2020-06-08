@@ -25,14 +25,14 @@ namespace ReservationManagementApp.Controllers
         public IActionResult Index(int? idEmployee)
         {
             AddModelErrors();
-            var employeesShiftsList = _context.EmployeesShifts.Where(elem => elem.IdEmployee == idEmployee && elem.WorkDay >= DateTime.Today).OrderBy(elem => elem.WorkDay).Include(e => e.IdEmployeeNavigation);
+            var reservationManagementDbContext = _context.EmployeesShifts.Where(elem => elem.IdEmployee == idEmployee).Include(e => e.IdEmployeeNavigation);
             EmployeeShiftModel employeeShiftModel = new EmployeeShiftModel();
-            employeeShiftModel.EmployeeShiftsList = employeesShiftsList;
-            employeeShiftModel.EmployeeShift = new EmployeesShifts();
-            employeeShiftModel.EmployeeShift.IdEmployeeNavigation = _context.Employees.FirstOrDefault(elem => elem.Id == idEmployee.Value);
-            employeeShiftModel.EmployeeShift.IdEmployee = idEmployee.Value;
-            employeeShiftModel.EmployeeShift.WorkDay = DateTime.Now;
+            employeeShiftModel.EmployeesShifts = reservationManagementDbContext;
+            employeeShiftModel.EmployeeShifts = new EmployeesShifts();
+            employeeShiftModel.EmployeeShifts.WorkDay = DateTime.Now;
             employeeShiftModel.EndDate = DateTime.Now;
+            employeeShiftModel.EmployeeShifts.IdEmployeeNavigation = _context.Employees.FirstOrDefault(elem => elem.Id == idEmployee.Value);
+            employeeShiftModel.EmployeeShifts.IdEmployee = idEmployee.Value;
 
             return View(employeeShiftModel);
         }
@@ -45,12 +45,12 @@ namespace ReservationManagementApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EmployeeShiftModel employeeShiftModel)
         {
-            List<EmployeesShifts> allShiftsToAdd = GetShiftsForEmployee(employeeShiftModel);
+            List<EmployeesShifts> AllShiftsToAdd = GetShiftsForEmployee(employeeShiftModel);
             if (ValidateemployeeShiftModel(employeeShiftModel))
             {
-                if (allShiftsToAdd.Count() > 0)//Validaciones
+                if (AllShiftsToAdd.Count() > 0)//Validaciones
                 {
-                    foreach (EmployeesShifts shift in allShiftsToAdd)
+                    foreach (EmployeesShifts shift in AllShiftsToAdd)
                     {
                         if (ValidateShift(shift))
                         {
@@ -58,23 +58,24 @@ namespace ReservationManagementApp.Controllers
                         }
                         else
                         {
-                            return RedirectToAction(nameof(Index), new
+                           return RedirectToAction(nameof(Index), new
                             {
-                                idEmployee = employeeShiftModel.EmployeeShift.IdEmployee
+                                idEmployee = employeeShiftModel.EmployeeShifts.IdEmployee
                             });
                         }
                     }
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index), new
                     {
-                        idEmployee = employeeShiftModel.EmployeeShift.IdEmployee
+                        idEmployee = employeeShiftModel.EmployeeShifts.IdEmployee
                     });
                 }
             }
-            return RedirectToAction(nameof(Index), new
-            {
-                idEmployee = employeeShiftModel.EmployeeShift.IdEmployee
-            });
+          
+                return RedirectToAction(nameof(Index), new
+                    {
+                        idEmployee = employeeShiftModel.EmployeeShifts.IdEmployee
+                    });
         }
 
         // GET: EmployeesShifts/Delete/5
@@ -120,7 +121,7 @@ namespace ReservationManagementApp.Controllers
             List<EmployeesShifts> employeesShifts = new List<EmployeesShifts>();
             var dates = new List<DateTime>();
 
-            for (var dt = employeeShiftModel.EmployeeShift.WorkDay; dt <= employeeShiftModel.EndDate; dt = dt.AddDays(1))
+            for (var dt = employeeShiftModel.EmployeeShifts.WorkDay; dt <= employeeShiftModel.EndDate; dt = dt.AddDays(1))
             {
                 dates.Add(dt);
             }
@@ -128,37 +129,38 @@ namespace ReservationManagementApp.Controllers
             foreach (DateTime date in dates)
             {
                 EmployeesShifts employeeShift = new EmployeesShifts();
-                employeeShift.InitHour = employeeShiftModel.EmployeeShift.InitHour;
-                employeeShift.EndHour = employeeShiftModel.EmployeeShift.EndHour;
+                employeeShift.InitHour = employeeShiftModel.EmployeeShifts.InitHour;
+                employeeShift.EndHour = employeeShiftModel.EmployeeShifts.EndHour;
                 employeeShift.WorkDay = date;
-                employeeShift.IdEmployee = employeeShiftModel.EmployeeShift.IdEmployee;
+                employeeShift.IdEmployee = employeeShiftModel.EmployeeShifts.IdEmployee;
                 employeesShifts.Add(employeeShift);
             }
             return employeesShifts;
         }
         private bool ValidateemployeeShiftModel(EmployeeShiftModel employeeShiftModel)
         {
-            if (employeeShiftModel.EmployeeShift.WorkDay > employeeShiftModel.EndDate)
+
+            if (employeeShiftModel.EmployeeShifts.WorkDay > employeeShiftModel.EndDate)
             {
                 TempData["ErrorDate"] = "The End Date must be greather than the Init Date";
             }
-            if (employeeShiftModel.EmployeeShift.InitHour > employeeShiftModel.EmployeeShift.EndHour)
+            if (employeeShiftModel.EmployeeShifts.InitHour > employeeShiftModel.EmployeeShifts.EndHour)
             {
                 TempData["ErrorHours"] = "The End Date must be greather than the Init Date";
             }
-            if (employeeShiftModel.EmployeeShift.InitHour > 24 || employeeShiftModel.EmployeeShift.InitHour < 0)
+            if (employeeShiftModel.EmployeeShifts.InitHour > 24 || employeeShiftModel.EmployeeShifts.InitHour <0)
             {
                 TempData["ErrorInitHour"] = "The Init Hour must be a number between 0 and 24";
             }
-            if (employeeShiftModel.EmployeeShift.EndHour > 24 || employeeShiftModel.EmployeeShift.EndHour < 0)
+            if (employeeShiftModel.EmployeeShifts.EndHour > 24 || employeeShiftModel.EmployeeShifts.EndHour < 0)
             {
                 TempData["ErrorEndHour"] = "The End Hour must be a number between 0 and 24";
             }
-            if (employeeShiftModel.EmployeeShift.InitHour == employeeShiftModel.EmployeeShift.EndHour)
+            if (employeeShiftModel.EmployeeShifts.InitHour == employeeShiftModel.EmployeeShifts.EndHour)
             {
                 TempData["ErrorSameHour"] = "The init Hour must be different to End Hour";
             }
-            if (TempData.Count > 0)
+            if (TempData.Count>0)
                 return false;
             return true;
         }
@@ -181,17 +183,18 @@ namespace ReservationManagementApp.Controllers
         }
         private bool ValidateShift(EmployeesShifts shift)
         {
-            if (_context.EmployeesShifts.FirstOrDefault(elem => elem.IdEmployee == shift.IdEmployee
-             && elem.WorkDay == shift.WorkDay
-             && ((elem.InitHour < shift.InitHour && elem.EndHour > shift.InitHour)
-             || (elem.InitHour < shift.EndHour && elem.EndHour > shift.EndHour)
-             || (elem.InitHour == shift.InitHour && elem.EndHour == shift.EndHour)
-             || (elem.InitHour > shift.InitHour && elem.EndHour < shift.EndHour))
+            if(_context.EmployeesShifts.FirstOrDefault(elem=> elem.IdEmployee == shift.IdEmployee
+            && elem.WorkDay == shift.WorkDay 
+            && ((elem.InitHour < shift.InitHour && elem.EndHour > shift.InitHour)
+            || (elem.InitHour < shift.EndHour && elem.EndHour > shift.EndHour)
+            || (elem.InitHour == shift.InitHour && elem.EndHour == shift.EndHour)
+            || (elem.InitHour > shift.InitHour && elem.EndHour < shift.EndHour))
             ) != null)
             {
                 TempData["Error"] = "The shift " + shift.InitHour + " - " + shift.EndHour + " is already included on day " + shift.WorkDay;
                 return false;
             }
+
             return true;
         }
     }

@@ -9,13 +9,13 @@
 <form asp-action="Create">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
-        <label asp-for="ServiceEmployee.IdEmployeeNavigation.Name" class="control-label"></label>
-        <input asp-for="ServiceEmployee.IdEmployeeNavigation.Name" class="form-control" disabled="disabled" />
-        <input asp-for="ServiceEmployee.IdEmployee" class="form-control" hidden="hidden" />
+        <label asp-for="ServicesEmployee.IdEmployeeNavigation.Name" class="control-label"></label>
+        <input asp-for="ServicesEmployee.IdEmployeeNavigation.Name" class="form-control" disabled="disabled" />
+        <input asp-for="ServicesEmployee.IdEmployee" class="form-control" hidden="hidden" />
     </div>
     <div class="form-group">
         <label class="control-label">Service</label>
-        <select asp-for="ServiceEmployee.IdService" class="form-control" asp-items="ViewBag.IdService" onchange="hideMessageError()"></select>
+        <select asp-for="ServicesEmployee.IdService" class="form-control" asp-items="ViewBag.IdService" onchange="hideMessageError()"></select>
     </div>
     <div id="messageError" class="text-danger">
         @Html.ValidationMessage("Error")
@@ -28,10 +28,10 @@
     </div>
     <div class="row">
         <div class="col-md-4">
-            <a asp-controller="Employees" asp-action="Edit" asp-route-id=@Model.ServiceEmployee.IdEmployee>Edit Employee</a>
+            <a asp-controller="Employees" asp-action="Edit" asp-route-id=@Model.ServicesEmployee.IdEmployee>Edit Employee</a>
         </div>
         <div class="col-md-4">
-            <a asp-controller="EmployeesShifts" asp-action="Index" asp-route-idEmployee=@Model.ServiceEmployee.IdEmployee>Shifts Management</a>
+            <a asp-controller="EmployeesShifts" asp-action="Index" asp-route-idEmployee=@Model.ServicesEmployee.IdEmployee>Shifts Management</a>
         </div>
     </div>
 </form>
@@ -43,16 +43,16 @@
     <thead>
         <tr>
             <th>
-                Employee @Html.DisplayNameFor(model => model.ServiceEmployee.IdEmployeeNavigation.Name)
+                Employee @Html.DisplayNameFor(model => model.ServicesEmployee.IdEmployeeNavigation.Name)
             </th>
             <th>
-                Service @Html.DisplayNameFor(model => model.ServiceEmployee.IdServiceNavigation.Name)
+                Service @Html.DisplayNameFor(model => model.ServicesEmployee.IdServiceNavigation.Name)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.ServicesEmployeesList)
+        @foreach (var item in Model.ServicesEmployees)
         {
             <tr>
                 <td>
