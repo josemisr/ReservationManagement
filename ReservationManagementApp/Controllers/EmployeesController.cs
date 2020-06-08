@@ -139,11 +139,23 @@ namespace ReservationManagementApp.Controllers
         // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var employees = await _context.Employees.FindAsync(id);
-            _context.Employees.Remove(employees);
-            await _context.SaveChangesAsync();
+            var employee =  _context.Employees.Where(elem=> elem.Id == id).Include(s => s.Reservations).Include(s => s.ServicesEmployees).Include(s => s.EmployeesShifts).FirstOrDefault();
+            foreach (Reservations reservation in employee.Reservations)
+            {
+                _context.Reservations.Remove(reservation);
+            }
+            foreach (ServicesEmployees service in employee.ServicesEmployees)
+            {
+                _context.ServicesEmployees.Remove(service);
+            }
+            foreach (EmployeesShifts shift in employee.EmployeesShifts)
+            {
+                _context.EmployeesShifts.Remove(shift);
+            }
+            _context.Employees.Remove(employee);
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 

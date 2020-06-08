@@ -56,7 +56,7 @@ namespace ReservationManagementApp.Models
                 entity.HasOne(d => d.IdEmployeeNavigation)
                     .WithMany(p => p.EmployeesShifts)
                     .HasForeignKey(d => d.IdEmployee)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FKEmployeesShifts_Employees");
             });
 
