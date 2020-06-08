@@ -127,10 +127,11 @@ namespace ReservationManagementApp.Controllers
         {
             List<Reservations> possibleReservations = new List<Reservations>();
 
-            EmployeesShifts employeeShifts = _context.EmployeesShifts.FirstOrDefault(elem => elem.IdEmployee == reservation.IdEmployee);
+            List<EmployeesShifts> employeesShiftsList = _context.EmployeesShifts.Where(elem => elem.IdEmployee == reservation.IdEmployee && elem.WorkDay == reservation.Date).ToList();
+           foreach(EmployeesShifts employeeShifts in employeesShiftsList)
             if (employeeShifts != null)
             {
-                for (int i = employeeShifts.InitHour; i <= employeeShifts.EndHour; i++)
+                for (int i = employeeShifts.InitHour; i < employeeShifts.EndHour; i++)
                 {
                     Reservations possibleReservation = new Reservations();
                     possibleReservation.IdEmployee = reservation.IdEmployee;
