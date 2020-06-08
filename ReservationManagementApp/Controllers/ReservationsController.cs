@@ -44,101 +44,47 @@ namespace ReservationManagementApp.Controllers
 
             return View(reservationModel);
         }
-
-        // GET: Reservations/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var reservations = await _context.Reservations
-                .Include(r => r.IdEmployeeNavigation)
-                .Include(r => r.IdServiceNavigation)
-                .Include(r => r.IdUserNavigation)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (reservations == null)
-            {
-                return NotFound();
-            }
-
-            return View(reservations);
-        }
-
-        // GET: Reservations/Create
         public IActionResult New([Bind("Id,IdService,IdEmployee,IdUser,Date")] Reservations reservation)
         {
-            if (ModelState.IsValid)
-            {
-                if (reservation.IdService == 0)
-                {
-                    return RedirectToAction(nameof(Index));
-                }
-                reservation.IdServiceNavigation = _context.Services.FirstOrDefault(elem => elem.Id == reservation.IdService);
-                reservation.IdEmployeeNavigation = _context.Employees.FirstOrDefault(elem => elem.Id == reservation.IdEmployee);
-                ViewData["IdEmployee"] = new SelectList(_context.Employees
-                    .Include(r => r.ServicesEmployees)
-                    .Include(r => r.EmployeesShifts)
-                    .Where(elem => elem.ServicesEmployees.FirstOrDefault(elem2 => elem2.IdService == reservation.IdService) != null
-                                    && elem.EmployeesShifts.FirstOrDefault(elem2 => elem2.WorkDay == reservation.Date) != null)
-                    , "Id", "Name");
+            reservation.IdServiceNavigation = _context.Services.FirstOrDefault(elem => elem.Id == reservation.IdService);
+            reservation.IdEmployeeNavigation = _context.Employees.FirstOrDefault(elem => elem.Id == reservation.IdEmployee);
+            ViewData["IdEmployee"] = new SelectList(_context.Employees
+                .Include(r => r.ServicesEmployees)
+                .Include(r => r.EmployeesShifts)
+                .Where(elem => elem.ServicesEmployees.FirstOrDefault(elem2 => elem2.IdService == reservation.IdService) != null
+                                && elem.EmployeesShifts.FirstOrDefault(elem2 => elem2.WorkDay == reservation.Date) != null)
+                , "Id", "Name");
 
-                if (string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
+            {
+                Users user = JsonSerializer.Deserialize<Users>(HttpContext.Session.GetString("User"));
+                reservation.IdUser = user.Id;
+            }
+            ReservationModel reseservationModel = new ReservationModel();
+            reseservationModel.Reservation = reservation;
+            reseservationModel.Reservations = Getavailability(reservation);
+            return View(reseservationModel);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Search([Bind("Id,IdService,IdEmployee,IdUser,Date")] Reservations reservation)
+        {
+            if (ModelState.IsValid && reservation.IdService != 0)
+            {
+                return RedirectToAction(nameof(New), new
                 {
-                    Users user = JsonSerializer.Deserialize<Users>(HttpContext.Session.GetString("User"));
-                    reservation.IdUser = user.Id;
-                }
-                ReservationModel reseservationModel = new ReservationModel();
-                reseservationModel.Reservation = reservation;
-                reseservationModel.Reservations = Getavailability(reservation);
-                return View(reseservationModel);
+                    idService = reservation.IdService,
+                    idEmployee = reservation.IdEmployee,
+                    date = reservation.Date
+                });
             }
             if (ModelState["reservation.Date"] != null)
                 TempData["Date"] = ModelState["reservation.Date"].Errors.Count() > 0 ? "Select a Date" : "";
             if (ModelState["reservation.IdService"] != null)
                 TempData["IdService"] = ModelState["reservation.IdService"].Errors.Count() > 0 ? "Select a Service" : "";
             return RedirectToAction(nameof(Index));
-        }
-
-        private List<Reservations> Getavailability(Reservations reservation)
-        {
-            List<Reservations> currentReservations = GetCurrentsReservations(reservation);
-            List<Reservations> possibleReservations = GetPossibleReservations(reservation);
-            possibleReservations = possibleReservations.Where(elem => currentReservations.FirstOrDefault(elem2 => elem.Date == elem2.Date) == null).ToList();
-            return possibleReservations;
-        }
-
-        private List<Reservations> GetCurrentsReservations(Reservations reservation)
-        {
-            List<Reservations> currentReservations = _context.Reservations
-               .Where(elem => elem.IdEmployee == reservation.IdEmployee &&
-               elem.Date.Date == reservation.Date.Date).ToList();
-            return currentReservations;
-        }
-
-        private List<Reservations> GetPossibleReservations(Reservations reservation)
-        {
-            List<Reservations> possibleReservations = new List<Reservations>();
-
-            List<EmployeesShifts> employeesShiftsList = _context.EmployeesShifts.Where(elem => elem.IdEmployee == reservation.IdEmployee && elem.WorkDay == reservation.Date).OrderBy(elem=> elem.InitHour).ToList();
-           foreach(EmployeesShifts employeeShifts in employeesShiftsList)
-            if (employeeShifts != null)
-            {
-                for (int i = employeeShifts.InitHour; i < employeeShifts.EndHour; i++)
-                {
-                    Reservations possibleReservation = new Reservations();
-                    possibleReservation.IdEmployee = reservation.IdEmployee;
-                    possibleReservation.IdService = reservation.IdService;
-                    possibleReservation.IdUser = reservation.IdUser;
-                    possibleReservation.IdServiceNavigation = reservation.IdServiceNavigation;
-                    possibleReservation.IdEmployeeNavigation = reservation.IdEmployeeNavigation;
-                    DateTime possibleDatetime = reservation.Date.AddHours(i);
-                    possibleReservation.Date = possibleDatetime;
-                    possibleReservations.Add(possibleReservation);
-                }
-            }
-            return possibleReservations;
         }
 
         // POST: Reservations/Create
@@ -166,63 +112,6 @@ namespace ReservationManagementApp.Controllers
             reseservationModel.Reservation = reservation;
             reseservationModel.Reservations = _context.Reservations;
             return View(reseservationModel);
-        }
-
-        // GET: Reservations/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var reservations = await _context.Reservations.FindAsync(id);
-            if (reservations == null)
-            {
-                return NotFound();
-            }
-            ViewData["IdEmployee"] = new SelectList(_context.Employees, "Id", "IdCard", reservations.IdEmployee);
-            ViewData["IdService"] = new SelectList(_context.Services, "Id", "Name", reservations.IdService);
-            ViewData["IdUser"] = new SelectList(_context.Users, "Id", "Email", reservations.IdUser);
-            return View(reservations);
-        }
-
-        // POST: Reservations/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,IdService,IdEmployee,IdUser,Date")] Reservations reservations)
-        {
-            if (id != reservations.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(reservations);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReservationsExists(reservations.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["IdEmployee"] = new SelectList(_context.Employees, "Id", "IdCard", reservations.IdEmployee);
-            ViewData["IdService"] = new SelectList(_context.Services, "Id", "Name", reservations.IdService);
-            ViewData["IdUser"] = new SelectList(_context.Users, "Id", "Email", reservations.IdUser);
-            return View(reservations);
         }
 
         // GET: Reservations/Delete/5
@@ -255,6 +144,46 @@ namespace ReservationManagementApp.Controllers
             _context.Reservations.Remove(reservations);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private List<Reservations> Getavailability(Reservations reservation)
+        {
+            List<Reservations> currentReservations = GetCurrentsReservations(reservation);
+            List<Reservations> possibleReservations = GetPossibleReservations(reservation);
+            possibleReservations = possibleReservations.Where(elem => currentReservations.FirstOrDefault(elem2 => elem.Date == elem2.Date) == null).ToList();
+            return possibleReservations;
+        }
+
+        private List<Reservations> GetCurrentsReservations(Reservations reservation)
+        {
+            List<Reservations> currentReservations = _context.Reservations
+               .Where(elem => elem.IdEmployee == reservation.IdEmployee &&
+               elem.Date.Date == reservation.Date.Date).ToList();
+            return currentReservations;
+        }
+
+        private List<Reservations> GetPossibleReservations(Reservations reservation)
+        {
+            List<Reservations> possibleReservations = new List<Reservations>();
+
+            List<EmployeesShifts> employeesShiftsList = _context.EmployeesShifts.Where(elem => elem.IdEmployee == reservation.IdEmployee && elem.WorkDay == reservation.Date).OrderBy(elem => elem.InitHour).ToList();
+            foreach (EmployeesShifts employeeShifts in employeesShiftsList)
+                if (employeeShifts != null)
+                {
+                    for (int i = employeeShifts.InitHour; i < employeeShifts.EndHour; i++)
+                    {
+                        Reservations possibleReservation = new Reservations();
+                        possibleReservation.IdEmployee = reservation.IdEmployee;
+                        possibleReservation.IdService = reservation.IdService;
+                        possibleReservation.IdUser = reservation.IdUser;
+                        possibleReservation.IdServiceNavigation = reservation.IdServiceNavigation;
+                        possibleReservation.IdEmployeeNavigation = reservation.IdEmployeeNavigation;
+                        DateTime possibleDatetime = reservation.Date.AddHours(i);
+                        possibleReservation.Date = possibleDatetime;
+                        possibleReservations.Add(possibleReservation);
+                    }
+                }
+            return possibleReservations;
         }
 
         private bool ReservationsExists(int id)
