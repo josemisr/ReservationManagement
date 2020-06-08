@@ -89,15 +89,9 @@ namespace ReservationManagementApp.Controllers
                     Users user = JsonSerializer.Deserialize<Users>(HttpContext.Session.GetString("User"));
                     reservation.IdUser = user.Id;
                 }
-
-                if (reservation.IdEmployee == 0)
-                {
-                    reservation.IdEmployee = 0;
-                }
-
                 ReservationModel reseservationModel = new ReservationModel();
                 reseservationModel.Reservation = reservation;
-                reseservationModel.Reservations = Getavailability(reservation);//.Where(elem=>elem.IdEmployeeNavigation.Id==reservation.IdEmployee);
+                reseservationModel.Reservations = Getavailability(reservation);
                 return View(reseservationModel);
             }
             if (ModelState["reservation.Date"] != null)
@@ -127,7 +121,7 @@ namespace ReservationManagementApp.Controllers
         {
             List<Reservations> possibleReservations = new List<Reservations>();
 
-            List<EmployeesShifts> employeesShiftsList = _context.EmployeesShifts.Where(elem => elem.IdEmployee == reservation.IdEmployee && elem.WorkDay == reservation.Date).ToList();
+            List<EmployeesShifts> employeesShiftsList = _context.EmployeesShifts.Where(elem => elem.IdEmployee == reservation.IdEmployee && elem.WorkDay == reservation.Date).OrderBy(elem=> elem.InitHour).ToList();
            foreach(EmployeesShifts employeeShifts in employeesShiftsList)
             if (employeeShifts != null)
             {
@@ -144,7 +138,6 @@ namespace ReservationManagementApp.Controllers
                     possibleReservations.Add(possibleReservation);
                 }
             }
-
             return possibleReservations;
         }
 
