@@ -77,6 +77,11 @@ namespace ReservationManagementApp.Controllers
             if (ModelState.IsValid)
             {
                 users.IdRole = 2;
+                if (_context.Users.FirstOrDefault(elem => elem.Email == users.Email) != null)
+                {
+                    ModelState.AddModelError("ErrorEmail", "The Email already exists");
+                    return View(users);
+                }
                 _context.Add(users);
                 var result = await _context.SaveChangesAsync();
                 if (result > 0)
