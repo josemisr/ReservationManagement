@@ -7,9 +7,9 @@ namespace ReservationManagementApp.Models.EmployeeShiftModel
 {
     public class EmployeeShiftModel
     {
-        public EmployeesShifts EmployeeShifts { get; set; }
+        public EmployeesShifts EmployeeShift { get; set; }
         public DateTime EndDate { get; set; }
-        public IEnumerable<EmployeesShifts> EmployeesShifts { get; set; }
+        public IEnumerable<EmployeesShifts> EmployeeShiftsList { get; set; }
 
 
     }
