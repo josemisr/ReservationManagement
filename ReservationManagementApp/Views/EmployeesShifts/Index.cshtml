@@ -89,8 +89,37 @@
 </form>
 <br />
 
+<hr />
 <h4>Employee Shifts</h4>
 <hr />
+<h6>Filter Search</h6>
+
+<div class="row">
+    <div class="col-md-11">
+        <form asp-action="Filter">
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="control-label">Work Day</label>
+                </div>
+                <div class="col-md-9">
+                    <input type="date" asp-for="EmployeeShift.WorkDay" class="form-control" />
+                    <input asp-for="EmployeeShift.IdEmployee" class="form-control" hidden="hidden" />
+                </div>
+                <div class="col-md-1">
+                    <input type="submit" value="Filter" class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-1">
+        <form asp-action="ClearFilter">
+            <input asp-for="EmployeeShift.IdEmployee" class="form-control" hidden="hidden" />
+            <div class="form-group">
+                <input type="submit" value="Clear" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -132,3 +161,8 @@
         }
     </tbody>
 </table>
+<script>
+    function hideMessageError() {
+        document.getElementById('messageError').style.visibility = "hidden";
+    }
+</script>

@@ -22,19 +22,41 @@ namespace ReservationManagementApp.Controllers
         }
 
         // GET: EmployeesShifts
-        public IActionResult Index(int? idEmployee)
+        public IActionResult Index(int? idEmployee, DateTime? workDay)
         {
             AddModelErrors();
-            var employeesShiftsList = _context.EmployeesShifts.Where(elem => elem.IdEmployee == idEmployee && elem.WorkDay >= DateTime.Today).OrderBy(elem => elem.WorkDay).Include(e => e.IdEmployeeNavigation);
+            var employeesShiftsList = _context.EmployeesShifts.Where(elem => elem.IdEmployee == idEmployee
+            && ((workDay != null && elem.WorkDay == workDay) || (workDay == null && elem.WorkDay >= DateTime.Today))).OrderBy(elem => elem.WorkDay).Include(e => e.IdEmployeeNavigation);
             EmployeeShiftModel employeeShiftModel = new EmployeeShiftModel();
             employeeShiftModel.EmployeeShiftsList = employeesShiftsList;
             employeeShiftModel.EmployeeShift = new EmployeesShifts();
             employeeShiftModel.EmployeeShift.IdEmployeeNavigation = _context.Employees.FirstOrDefault(elem => elem.Id == idEmployee.Value);
             employeeShiftModel.EmployeeShift.IdEmployee = idEmployee.Value;
-            employeeShiftModel.EmployeeShift.WorkDay = DateTime.Now;
-            employeeShiftModel.EndDate = DateTime.Now;
+            employeeShiftModel.EmployeeShift.WorkDay = workDay == null ? DateTime.Now: workDay.Value;
+            employeeShiftModel.EndDate = workDay == null ? DateTime.Now : workDay.Value;
 
             return View(employeeShiftModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Filter(EmployeeShiftModel employeeShiftModel)
+        {
+            return RedirectToAction(nameof(Index), new
+            {
+                idEmployee = employeeShiftModel.EmployeeShift.IdEmployee,
+                workDay = employeeShiftModel.EmployeeShift.WorkDay
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ClearFilter(EmployeeShiftModel employeeShiftModel)
+        {
+            return RedirectToAction(nameof(Index), new
+            {
+                idEmployee = employeeShiftModel.EmployeeShift.IdEmployee
+            });
         }
 
 
