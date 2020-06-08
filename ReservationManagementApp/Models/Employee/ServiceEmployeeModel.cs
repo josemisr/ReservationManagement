@@ -7,8 +7,8 @@ namespace ReservationManagementApp.Models.ServiceEmployeeModel
 {
     public class ServiceEmployeeModel
     {
-        public ServicesEmployees ServicesEmployee { get; set; }
-        public IEnumerable<ServicesEmployees> ServicesEmployees { get; set; }
+        public ServicesEmployees ServiceEmployee { get; set; }
+        public IEnumerable<ServicesEmployees> ServicesEmployeesList { get; set; }
        
     }
 }

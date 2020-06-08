@@ -61,8 +61,11 @@ namespace ReservationManagementApp.Controllers
             {
                 _context.Add(employees);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Edit), employees.Id);
-               
+                return RedirectToAction(nameof(Edit), new
+                {
+                    id = employees.Id
+                });
+
             }
             return View(employees);
         }
