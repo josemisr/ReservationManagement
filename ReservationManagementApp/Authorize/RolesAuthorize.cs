@@ -34,17 +34,17 @@ namespace ReservationManagementApp.Authorize
             if (requirement.Role != 0)
             {
                 if (string.IsNullOrEmpty(_httpContextAccessor.HttpContext.Session.GetString("User")))
-                    {
+                {
                     context.Fail();
                 }
                 else
                 {
                     Users user = JsonSerializer.Deserialize<Users>(_httpContextAccessor.HttpContext.Session.GetString("User"));
-                    if (user.IdRole== requirement.Role)
+                    if (user.IdRole == requirement.Role)
                     {
                         context.Succeed(requirement);
                     }
-                }       
+                }
             }
             else
             {

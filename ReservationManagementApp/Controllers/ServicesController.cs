@@ -59,19 +59,19 @@ namespace ReservationManagementApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,Image,Description")] Services service, [FromForm] IFormFile Image)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,Image,Description")] Services service, [FromForm] IFormFile image)
         {
             if (ModelState.IsValid)
             {
-                if (Image != null)
+                if (image != null)
                 {
                     //upload files to wwwroot
-                    var fileName = Path.GetFileName(Image.FileName);
+                    var fileName = Path.GetFileName(image.FileName);
                     var filePath = Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/Resources/", "Images", fileName);
                     service.Image = "/Resources/Images/" + fileName;
                     using (var fileSteam = new FileStream(filePath, FileMode.Create))
                     {
-                        await Image.CopyToAsync(fileSteam);
+                        await image.CopyToAsync(fileSteam);
                     }
                 }
                 _context.Add(service);
@@ -102,7 +102,7 @@ namespace ReservationManagementApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Image,Description")] Services service, IFormFile Image)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Image,Description")] Services service, IFormFile image)
         {
             if (id != service.Id)
             {
@@ -113,15 +113,15 @@ namespace ReservationManagementApp.Controllers
             {
                 try
                 {
-                    if (Image != null)
+                    if (image != null)
                     {
                         //upload files to wwwroot
-                        var fileName = Path.GetFileName(Image.FileName);
+                        var fileName = Path.GetFileName(image.FileName);
                         var filePath = Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/Resources/", "Images", fileName);
                         service.Image = "/Resources/Images/" + fileName;
                         using (var fileSteam = new FileStream(filePath, FileMode.Create))
                         {
-                            await Image.CopyToAsync(fileSteam);
+                            await image.CopyToAsync(fileSteam);
                         }
                     }
                     _context.Update(service);

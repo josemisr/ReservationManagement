@@ -34,14 +34,14 @@ namespace ReservationManagementApp.Controllers
                 return NotFound();
             }
 
-            var employees = await _context.Employees
+            var employee = await _context.Employees
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (employees == null)
+            if (employee == null)
             {
                 return NotFound();
             }
 
-            return View(employees);
+            return View(employee);
         }
 
         // GET: Employees/Create
@@ -55,19 +55,19 @@ namespace ReservationManagementApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Surname,Surname2,IdCard")] Employees employees)
+        public async Task<IActionResult> Create([Bind("Id,Name,Surname,Surname2,IdCard")] Employees employee)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(employees);
+                _context.Add(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Edit), new
                 {
-                    id = employees.Id
+                    id = employee.Id
                 });
 
             }
-            return View(employees);
+            return View(employee);
         }
 
         // GET: Employees/Edit/5
@@ -78,12 +78,12 @@ namespace ReservationManagementApp.Controllers
                 return NotFound();
             }
 
-            var employees = await _context.Employees.FindAsync(id);
-            if (employees == null)
+            var employee = await _context.Employees.FindAsync(id);
+            if (employee == null)
             {
                 return NotFound();
             }
-            return View(employees);
+            return View(employee);
         }
 
         // POST: Employees/Edit/5
@@ -144,7 +144,7 @@ namespace ReservationManagementApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var employee =  _context.Employees.Where(elem=> elem.Id == id).Include(s => s.Reservations).Include(s => s.ServicesEmployees).Include(s => s.EmployeesShifts).FirstOrDefault();
+            var employee = _context.Employees.Where(elem => elem.Id == id).Include(s => s.Reservations).Include(s => s.ServicesEmployees).Include(s => s.EmployeesShifts).FirstOrDefault();
             foreach (Reservations reservation in employee.Reservations)
             {
                 _context.Reservations.Remove(reservation);

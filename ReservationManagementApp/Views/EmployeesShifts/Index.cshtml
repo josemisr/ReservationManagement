@@ -19,7 +19,7 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label class="control-label">Work Day</label>
-                <input type="date" asp-for="EmployeeShift.WorkDay" class="form-control" onchange="hideMessageError()" />
+                <input id="initDate" type="date" asp-for="EmployeeShift.WorkDay" class="form-control" onchange="hideMessageError()" />
                 <span asp-validation-for="EmployeeShift.WorkDay" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -32,7 +32,7 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label class="control-label">End Date</label>
-                <input type="date" asp-for="EndDate" class="form-control" onchange="hideMessageError()" />
+                <input id="endDate" type="date" asp-for="EndDate" class="form-control" onchange="hideMessageError()" />
             </div>
             <div class="form-group">
                 <label class="control-label">End Hour</label>
@@ -78,15 +78,18 @@
             <input type="submit" value="Add" class="btn btn-primary" />
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-4">
-            <a asp-controller="Employees" asp-action="Edit" asp-route-id=@Model.EmployeeShift.IdEmployee>Edit Employee</a>
-        </div>
-        <div class="col-md-4">
-            <a asp-controller="ServicesEmployees" asp-action="Index" asp-route-idEmployee=@Model.EmployeeShift.IdEmployee>Services Management</a>
-        </div>
-    </div>
 </form>
+<div class="row">
+    <div class="col-md-4">
+        <a asp-controller="Employees" asp-action="Index">Back to list</a>
+    </div>
+    <div class="col-md-4">
+        <a asp-controller="Employees" asp-action="Edit" asp-route-id=@Model.EmployeeShift.IdEmployee>Edit Employee</a>
+    </div>
+    <div class="col-md-4">
+        <a asp-controller="ServicesEmployees" asp-action="Index" asp-route-idEmployee=@Model.EmployeeShift.IdEmployee>Services Management</a>
+    </div>
+</div>
 <br />
 
 <hr />
@@ -162,6 +165,10 @@
     </tbody>
 </table>
 <script>
+    window.onload = function () {
+        document.getElementById("initDate").setAttribute('min', new Date().toISOString().split('T')[0]);
+        document.getElementById("endDate").setAttribute('min', new Date().toISOString().split('T')[0]);
+    };
     function hideMessageError() {
         document.getElementById('messageError').style.visibility = "hidden";
     }

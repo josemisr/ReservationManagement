@@ -38,7 +38,7 @@ namespace ReservationManagementApp.Controllers
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
             {
                 Users user = JsonSerializer.Deserialize<Users>(HttpContext.Session.GetString("User"));
-                reservationModel.Reservations = _context.Reservations.Where(elem => elem.IdUser == user.Id).Include(r => r.IdEmployeeNavigation)
+                reservationModel.Reservations = _context.Reservations.Where(elem => elem.IdUser == user.Id && elem.Date >= DateTime.Today).Include(r => r.IdEmployeeNavigation)
                 .Include(r => r.IdServiceNavigation);
             }
 

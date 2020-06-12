@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ReservationManagementApp.Models
 {
@@ -13,9 +14,11 @@ namespace ReservationManagementApp.Models
         }
 
         public int Id { get; set; }
+        [Required(ErrorMessage = "Name Required")]
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Surname2 { get; set; }
+        [Required(ErrorMessage = "IdCard Required")]
         public string IdCard { get; set; }
 
         public virtual ICollection<EmployeesShifts> EmployeesShifts { get; set; }

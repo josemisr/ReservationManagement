@@ -11,32 +11,32 @@
     <h4>Employee Shift</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Work Day
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.WorkDay)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Init Hour
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.InitHour)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             End Hour
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.EndHour)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Employee @Html.DisplayNameFor(model => model.IdEmployeeNavigation.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.IdEmployeeNavigation.Name)
-        </dd class>
+        </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |

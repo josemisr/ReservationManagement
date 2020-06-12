@@ -32,7 +32,7 @@ namespace ReservationManagementApp.Controllers
             employeeShiftModel.EmployeeShift = new EmployeesShifts();
             employeeShiftModel.EmployeeShift.IdEmployeeNavigation = _context.Employees.FirstOrDefault(elem => elem.Id == idEmployee.Value);
             employeeShiftModel.EmployeeShift.IdEmployee = idEmployee.Value;
-            employeeShiftModel.EmployeeShift.WorkDay = workDay == null ? DateTime.Now: workDay.Value;
+            employeeShiftModel.EmployeeShift.WorkDay = workDay == null ? DateTime.Now : workDay.Value;
             employeeShiftModel.EndDate = workDay == null ? DateTime.Now : workDay.Value;
 
             return View(employeeShiftModel);

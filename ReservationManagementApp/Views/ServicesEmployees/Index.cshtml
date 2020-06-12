@@ -26,15 +26,18 @@
             <input type="submit" value="Add" class="btn btn-primary" />
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-4">
-            <a asp-controller="Employees" asp-action="Edit" asp-route-id=@Model.ServiceEmployee.IdEmployee>Edit Employee</a>
-        </div>
-        <div class="col-md-4">
-            <a asp-controller="EmployeesShifts" asp-action="Index" asp-route-idEmployee=@Model.ServiceEmployee.IdEmployee>Shifts Management</a>
-        </div>
-    </div>
 </form>
+<div class="row">
+    <div class="col-md-4">
+        <a asp-controller="Employees" asp-action="Index">Back to list</a>
+    </div>
+    <div class="col-md-4">
+        <a asp-controller="Employees" asp-action="Edit" asp-route-id=@Model.ServiceEmployee.IdEmployee>Edit Employee</a>
+    </div>
+    <div class="col-md-4">
+        <a asp-controller="EmployeesShifts" asp-action="Index" asp-route-idEmployee=@Model.ServiceEmployee.IdEmployee>Shifts Management</a>
+    </div>
+</div>
 <br />
 
 <h4>Associated Services</h4>

@@ -44,31 +44,31 @@ namespace ReservationManagementApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ServiceEmployeeModel serviceEmployeeModel)
         {
-            ServicesEmployees servicesEmployee = new ServicesEmployees();
-            servicesEmployee.IdEmployee = serviceEmployeeModel.ServiceEmployee.IdEmployee;
-            servicesEmployee.IdService = serviceEmployeeModel.ServiceEmployee.IdService;
-            if (_context.ServicesEmployees.FirstOrDefault(elem => elem.IdEmployee == servicesEmployee.IdEmployee && elem.IdService == servicesEmployee.IdService) != null)
+            ServicesEmployees serviceEmployee = new ServicesEmployees();
+            serviceEmployee.IdEmployee = serviceEmployeeModel.ServiceEmployee.IdEmployee;
+            serviceEmployee.IdService = serviceEmployeeModel.ServiceEmployee.IdService;
+            if (_context.ServicesEmployees.FirstOrDefault(elem => elem.IdEmployee == serviceEmployee.IdEmployee && elem.IdService == serviceEmployee.IdService) != null)
             {
                 TempData["Error"] = "This services is assigned";
                 return RedirectToAction(nameof(Index), new
                 {
-                    idEmployee = servicesEmployee.IdEmployee
+                    idEmployee = serviceEmployee.IdEmployee
                 });
             }
             if (serviceEmployeeModel.ServiceEmployee.IdService != 0)
             {
-                _context.Add(servicesEmployee);
+                _context.Add(serviceEmployee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index), new
                 {
-                    idEmployee = servicesEmployee.IdEmployee
+                    idEmployee = serviceEmployee.IdEmployee
                 });
             }
 
-            ViewData["IdService"] = new SelectList(_context.Services, "Id", "Name", servicesEmployee.IdService);
+            ViewData["IdService"] = new SelectList(_context.Services, "Id", "Name", serviceEmployee.IdService);
             return RedirectToAction(nameof(Index), new
             {
-                idEmployee = servicesEmployee.IdEmployee
+                idEmployee = serviceEmployee.IdEmployee
             });
         }
 
@@ -80,16 +80,16 @@ namespace ReservationManagementApp.Controllers
                 return NotFound();
             }
 
-            var reservations = await _context.ServicesEmployees
+            var serviceEmployee = await _context.ServicesEmployees
                 .Include(r => r.IdEmployeeNavigation)
                 .Include(r => r.IdServiceNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (reservations == null)
+            if (serviceEmployee == null)
             {
                 return NotFound();
             }
 
-            return View(reservations);
+            return View(serviceEmployee);
         }
 
 
@@ -98,12 +98,12 @@ namespace ReservationManagementApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var servicesEmployees = await _context.ServicesEmployees.FindAsync(id);
-            _context.ServicesEmployees.Remove(servicesEmployees);
+            var serviceEmployee = await _context.ServicesEmployees.FindAsync(id);
+            _context.ServicesEmployees.Remove(serviceEmployee);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index), new
             {
-                idEmployee = servicesEmployees.IdEmployee
+                idEmployee = serviceEmployee.IdEmployee
             });
         }
 

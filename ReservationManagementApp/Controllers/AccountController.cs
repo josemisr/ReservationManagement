@@ -72,29 +72,29 @@ namespace ReservationManagementApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([Bind("Name,Surname,Surname2,IdCard,Email,Birthday,Password")] Users users)
+        public async Task<IActionResult> Register([Bind("Name,Surname,Surname2,IdCard,Email,Birthday,Password")] Users user)
         {
             if (ModelState.IsValid)
             {
-                users.IdRole = 2;
-                if (_context.Users.FirstOrDefault(elem => elem.Email == users.Email) != null)
+                user.IdRole = 2;
+                if (_context.Users.FirstOrDefault(elem => elem.Email == user.Email) != null)
                 {
                     ModelState.AddModelError("ErrorEmail", "The Email already exists");
-                    return View(users);
+                    return View(user);
                 }
-                _context.Add(users);
+                _context.Add(user);
                 var result = await _context.SaveChangesAsync();
                 if (result > 0)
                 {
                     if (string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
                     {
-                        HttpContext.Session.SetString("User", JsonSerializer.Serialize(users));
-                        HttpContext.Session.SetString("UserName", users.Name);
+                        HttpContext.Session.SetString("User", JsonSerializer.Serialize(user));
+                        HttpContext.Session.SetString("UserName", user.Name);
                     }
                     return RedirectToAction("Index", "Home");
                 }
             }
-            return View(users);
+            return View(user);
         }
 
         ////

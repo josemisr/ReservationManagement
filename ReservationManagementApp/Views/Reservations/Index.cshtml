@@ -10,7 +10,7 @@
         <div class="form-group row">
             <div class="col-md-6">
                 <label asp-for="Reservation.Date" class="control-label"></label>
-                <input asp-for="Reservation.Date" type="date" class="form-control" />
+                <input id="date" asp-for="Reservation.Date" type="date" class="form-control" />
                 <span asp-validation-for="Reservation.Date" class="text-danger"></span>
             </div>
 
@@ -32,3 +32,8 @@
 <div>
     <partial name="_CurrentsReservationsUser" for="Reservations" />
 </div>
+<script>
+    window.onload = function () {
+        document.getElementById("date").setAttribute('min', new Date().toISOString().split('T')[0]);
+    };
+</script>
