@@ -34,7 +34,7 @@ namespace Api
                       options.TokenValidationParameters = new TokenValidationParameters()
                       {
                           ValidateIssuer = true,
-                       //   ValidateLifetime = true,
+                          //   ValidateLifetime = true,
                           ValidateAudience = true,
                           ValidateIssuerSigningKey = true,
                           ValidIssuer = Configuration["JWT:Issuer"],

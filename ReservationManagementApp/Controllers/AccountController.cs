@@ -1,11 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using ReservationManagementApp.Models;
+using ReservationManagementApp.Models.JWT;
+using ReservationManagementApp.ServicesApp;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
@@ -19,11 +26,11 @@ namespace ReservationManagementApp.Controllers
     //[Authorize]
     public class AccountController : Controller
     {
-        private readonly ReservationManagementDbContext _context;
-
-        public AccountController(ReservationManagementDbContext context)
+        private readonly IConfiguration _configuration;
+        public HttpServicesReponse _clientService = new HttpServicesReponse();
+        public AccountController(IConfiguration configuration)
         {
-            _context = context;
+            this._configuration = configuration;
         }
 
         //
@@ -42,21 +49,31 @@ namespace ReservationManagementApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(String email, string password, string returnUrl)
         {
-            Users userDb = _context.Users.FirstOrDefault(elem => elem.Email == email && elem.Password == password);
-            if (userDb != null)
+            string content = "{\"email\":\"" + email + "\",\"password\":\"" + password + "\"}";
+            string responseBody = _clientService.PostResponse(this._configuration["AppSettings:ApiRest"] + "api/AccountApi", content).GetAwaiter().GetResult();
+            JwtSecurityTokenHandler hand = new JwtSecurityTokenHandler();
+            if (!string.IsNullOrEmpty(responseBody))
             {
-                if (string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
+                var tokenS = hand.ReadJwtToken(responseBody);
+                if (responseBody != null)
                 {
-                    HttpContext.Session.SetString("User", JsonSerializer.Serialize(userDb));
-                    HttpContext.Session.SetString("UserName", userDb.Name);
+                    if (string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
+                    {
+                        UserJWT userJWT = JsonSerializer.Deserialize<UserJWT>(tokenS.Payload["UserJwt"].ToString());
+                        Users userDb = new Users();
+                        userDb.Email = userJWT.Email;
+                        userDb.IdRole = userJWT.IdRole;
+                        userDb.Name = userJWT.Name;
+                        HttpContext.Session.SetString("User", JsonSerializer.Serialize(userDb));
+                        HttpContext.Session.SetString("Jwt", JsonSerializer.Serialize(responseBody));
+                        HttpContext.Session.SetString("UserName", userDb.Name);
+                    }
+                    return RedirectToAction("Index", "Home");
                 }
-                return RedirectToAction("Index", "Home");
             }
-            else
-            {
-                ModelState.AddModelError("", "Login incorrecto");
-                return View();
-            }
+
+            ModelState.AddModelError("", "Login incorrecto");
+            return View();
         }
 
         //
@@ -77,21 +94,28 @@ namespace ReservationManagementApp.Controllers
             if (ModelState.IsValid)
             {
                 user.IdRole = 2;
-                if (_context.Users.FirstOrDefault(elem => elem.Email == user.Email) != null)
+                string responseBody = await _clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/AccountApi");
+                List<Users> list = JsonSerializer.Deserialize<List<Users>>(responseBody);
+                if (list.FirstOrDefault(elem => elem.Email == user.Email) != null)
                 {
                     ModelState.AddModelError("ErrorEmail", "The Email already exists");
                     return View(user);
                 }
-                _context.Add(user);
-                var result = await _context.SaveChangesAsync();
-                if (result > 0)
+                string responseBody2 = await _clientService.PostResponse(this._configuration["AppSettings:ApiRest"] + "api/AccountApi/Register", JsonSerializer.Serialize(user));
+                JwtSecurityTokenHandler hand = new JwtSecurityTokenHandler();
+                if (!string.IsNullOrEmpty(responseBody2))
                 {
-                    if (string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
+                    var tokenS = hand.ReadJwtToken(responseBody2);
+                    if (responseBody2 != null)
                     {
-                        HttpContext.Session.SetString("User", JsonSerializer.Serialize(user));
-                        HttpContext.Session.SetString("UserName", user.Name);
+                        if (string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
+                        {
+                            HttpContext.Session.SetString("User", JsonSerializer.Serialize(user));
+                            HttpContext.Session.SetString("Jwt", JsonSerializer.Serialize(responseBody2));
+                            HttpContext.Session.SetString("UserName", user.Name);
+                        }
+                        return RedirectToAction("Index", "Home");
                     }
-                    return RedirectToAction("Index", "Home");
                 }
             }
             return View(user);
@@ -108,6 +132,7 @@ namespace ReservationManagementApp.Controllers
             {
                 HttpContext.Session.SetString("User", "");
                 HttpContext.Session.SetString("UserName", "");
+                HttpContext.Session.SetString("Jwt", "");
             }
             return RedirectToAction("Index", "Home");
         }
