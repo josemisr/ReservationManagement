@@ -10,7 +10,7 @@ namespace DataAccess.Operations
     public  class UserOperations
     {
         private ReservationManagementDbContext db = new ReservationManagementDbContext();
-        public List<Users> getAllUsers()
+        public List<Users> GetAllUsers()
         {
             List<Users> users = db.Users.ToList();
             return users;

@@ -47,6 +47,7 @@ namespace Api
                       };
                   });
             services.AddTransient(typeof(IServiceService), typeof(ServiceService));
+            services.AddTransient(typeof(IAccountService), typeof(AccountService));
             services.AddControllers();
         }
 

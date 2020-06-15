@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using ReservationManagementApp.Models;
+using ReservationManagementApp.Models.Dto;
 using ReservationManagementApp.Models.JWT;
 using ReservationManagementApp.ServicesApp;
 using System;
@@ -60,7 +61,7 @@ namespace ReservationManagementApp.Controllers
                     if (string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
                     {
                         UserJWT userJWT = JsonSerializer.Deserialize<UserJWT>(tokenS.Payload["UserJwt"].ToString());
-                        Users userDb = new Users();
+                        UserDto userDb = new UserDto();
                         userDb.Email = userJWT.Email;
                         userDb.IdRole = userJWT.IdRole;
                         userDb.Name = userJWT.Name;
@@ -89,13 +90,13 @@ namespace ReservationManagementApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([Bind("Name,Surname,Surname2,IdCard,Email,Birthday,Password")] Users user)
+        public async Task<IActionResult> Register([Bind("Name,Surname,Surname2,IdCard,Email,Birthday,Password")] UserDto user)
         {
             if (ModelState.IsValid)
             {
                 user.IdRole = 2;
                 string responseBody = await _clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/AccountApi");
-                List<Users> list = JsonSerializer.Deserialize<List<Users>>(responseBody);
+                List<UserDto> list = JsonSerializer.Deserialize<List<UserDto>>(responseBody);
                 if (list.FirstOrDefault(elem => elem.Email == user.Email) != null)
                 {
                     ModelState.AddModelError("ErrorEmail", "The Email already exists");
