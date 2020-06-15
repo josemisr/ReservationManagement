@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Api.IServicesApi;
+using Api.ServicesApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -44,6 +46,7 @@ namespace Api
                           )
                       };
                   });
+            services.AddTransient(typeof(IServiceService), typeof(ServiceService));
             services.AddControllers();
         }
 

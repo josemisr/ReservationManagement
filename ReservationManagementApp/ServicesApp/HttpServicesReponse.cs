@@ -35,6 +35,26 @@ namespace ReservationManagementApp.ServicesApp
             string responseBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             return responseBody;
         }
-      
+
+        public async Task<string> PutResponse(string dir, string contentJson = "")
+        {
+            var request = new HttpRequestMessage
+            {
+                RequestUri = new Uri(dir),
+                Method = HttpMethod.Put,
+                Content = new StringContent(contentJson, Encoding.UTF8, "application/json")
+            };
+            HttpResponseMessage response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            string responseBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            return responseBody;
+        }
+        public async Task<string> DeleteResponse(string dir, string contentJson = "")
+        {
+            HttpResponseMessage response = await client.DeleteAsync(dir);
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync() ;
+            return responseBody;
+        }
     }
 }

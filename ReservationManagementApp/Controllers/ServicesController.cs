@@ -11,23 +11,30 @@ using ReservationManagementApp.Authorize;
 using ReservationManagementApp.Models;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using ReservationManagementApp.ServicesApp;
+using System.Text.Json;
+using Newtonsoft.Json;
+using ReservationManagementApp.Models.Dto;
 
 namespace ReservationManagementApp.Controllers
 {
     [Authorize(Policy = "Admin")]
     public class ServicesController : Controller
     {
-        private readonly ReservationManagementDbContext _context;
-
-        public ServicesController(ReservationManagementDbContext context)
+        private readonly IConfiguration _configuration;
+        public HttpServicesReponse _clientService = new HttpServicesReponse();
+        public ServicesController(IConfiguration configuration)
         {
-            _context = context;
+            this._configuration = configuration;
         }
 
         // GET: Services
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Services.ToListAsync());
+            string responseBody =  this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi").GetAwaiter().GetResult();
+            List<ServiceDto> list = JsonConvert.DeserializeObject<List<ServiceDto>>(responseBody);
+            return View(list);
         }
 
         // GET: Services/Details/5
@@ -37,15 +44,14 @@ namespace ReservationManagementApp.Controllers
             {
                 return NotFound();
             }
-
-            var services = await _context.Services
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (services == null)
+            string responseBody = await this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi/" + id);
+            ServiceDto service = JsonConvert.DeserializeObject<ServiceDto>(responseBody);
+            if (service == null)
             {
                 return NotFound();
             }
 
-            return View(services);
+            return View(service);
         }
 
         // GET: Services/Create
@@ -59,7 +65,7 @@ namespace ReservationManagementApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,Image,Description")] Services service, [FromForm] IFormFile image)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,Image,Description")] ServiceDto service, [FromForm] IFormFile image)
         {
             if (ModelState.IsValid)
             {
@@ -74,8 +80,8 @@ namespace ReservationManagementApp.Controllers
                         await image.CopyToAsync(fileSteam);
                     }
                 }
-                _context.Add(service);
-                await _context.SaveChangesAsync();
+                string responseBody = this._clientService.PostResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi", JsonConvert.SerializeObject(service)).GetAwaiter().GetResult();
+                if(!string.IsNullOrEmpty(responseBody))
                 return RedirectToAction(nameof(Index));
             }
             return View(service);
@@ -89,12 +95,13 @@ namespace ReservationManagementApp.Controllers
                 return NotFound();
             }
 
-            var services = await _context.Services.FindAsync(id);
-            if (services == null)
+            string responseBody = await this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi/" + id);
+            ServiceDto service = JsonConvert.DeserializeObject<ServiceDto>(responseBody);
+            if (service == null)
             {
                 return NotFound();
             }
-            return View(services);
+            return View(service);
         }
 
         // POST: Services/Edit/5
@@ -102,7 +109,7 @@ namespace ReservationManagementApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Image,Description")] Services service, IFormFile image)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Image,Description")] ServiceDto service, IFormFile image)
         {
             if (id != service.Id)
             {
@@ -124,8 +131,8 @@ namespace ReservationManagementApp.Controllers
                             await image.CopyToAsync(fileSteam);
                         }
                     }
-                    _context.Update(service);
-                    await _context.SaveChangesAsync();
+                    string responseBody = this._clientService.PutResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi/" + id, JsonConvert.SerializeObject(service)).GetAwaiter().GetResult();
+                  
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -151,14 +158,15 @@ namespace ReservationManagementApp.Controllers
                 return NotFound();
             }
 
-            var services = await _context.Services
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (services == null)
+            string responseBody = await this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi/" + id);
+            ServiceDto service = JsonConvert.DeserializeObject<ServiceDto>(responseBody);
+
+            if (service == null)
             {
                 return NotFound();
             }
 
-            return View(services);
+            return View(service);
         }
 
         // POST: Services/Delete/5
@@ -166,15 +174,16 @@ namespace ReservationManagementApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var services = await _context.Services.FindAsync(id);
-            _context.Services.Remove(services);
-            await _context.SaveChangesAsync();
+            await this._clientService.DeleteResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi/" + id);
             return RedirectToAction(nameof(Index));
+
         }
 
         private bool ServicesExists(int id)
         {
-            return _context.Services.Any(e => e.Id == id);
+            string responseBody = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi/" + id).GetAwaiter().GetResult();
+            ServiceDto service = JsonConvert.DeserializeObject<ServiceDto>(responseBody);
+            return service != null;
         }
 
 
