@@ -9,11 +9,11 @@ namespace Api.IServicesApi
 {
     public interface IServiceService
     {
-        List<ServiceDto> GetServices();
-        ServiceDto GetServiceById(int id);
-        ServiceDto AddService(ServiceDto serviceDto);
-        ServiceDto UpdateService(ServiceDto serviceDto);
-        ServiceDto RemoveService(int id);
+        List<Services> GetServices();
+        Services GetServiceById(int id);
+        Services AddService(ServiceDto serviceDto);
+        Services UpdateService(ServiceDto serviceDto);
+        Services RemoveService(int id);
 
     }
 }
