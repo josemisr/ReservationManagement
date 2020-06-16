@@ -10,7 +10,7 @@ namespace DataAccess.Operations
     public  class ServiceOperations
     {
         private ReservationManagementDbContext db = new ReservationManagementDbContext();
-        public List<Services> getAllServices()
+        public List<Services> GetAllServices()
         {
             List<Services> services = db.Services.ToList();
             return services;

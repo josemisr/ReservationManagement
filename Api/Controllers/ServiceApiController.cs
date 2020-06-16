@@ -25,15 +25,15 @@ namespace Api.Controllers
         }
         // GET: api/Service
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetServices()
         {
-            List<Services> services = _serviceServices.GetServices();
+            List<ServiceDto> services = _serviceServices.GetServices();
             return Ok(services);
         }
 
         // GET: api/Service/5
-        [HttpGet("{id}", Name = "Get")]
-        public IActionResult Get(int id)
+        [HttpGet("{id}", Name = "GetService")]
+        public IActionResult GetService(int id)
         {
             var result = _serviceServices.GetServiceById(id);
             return Ok(result);

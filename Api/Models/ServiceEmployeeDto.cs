@@ -11,7 +11,7 @@ namespace Api.Models
         public int IdService { get; set; }
         public int IdEmployee { get; set; }
 
-        public virtual EmployeeDto IdEmployeeNavigation { get; set; }
-        public virtual ServiceDto IdServiceNavigation { get; set; }
+        public EmployeeDto IdEmployeeNavigation { get; set; }
+        public ServiceDto IdServiceNavigation { get; set; }
     }
 }

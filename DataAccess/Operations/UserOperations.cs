@@ -18,13 +18,13 @@ namespace DataAccess.Operations
         public Users CreateUser(Users user)
         {
             db.Add(user);
-            db.SaveChangesAsync();
+            db.SaveChanges();
             return user;
         }
         public Users DeleteUser(Users user)
         {
             db.Remove(user);
-            db.SaveChangesAsync();
+            db.SaveChanges();
             return user;
         }
 
@@ -38,7 +38,6 @@ namespace DataAccess.Operations
         public Users ValidateUserLogin(string email, string password)
         {
             Users user = db.Users.Where(elem=> elem.Email == email && elem.Password == password).Include(e => e.IdRoleNavigation).FirstOrDefault();
-            db.SaveChangesAsync();
             return user;
         }
         public Users GetByPk(int id)

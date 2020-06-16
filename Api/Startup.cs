@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Api.IServicesApi;
 using Api.ServicesApi;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,7 +38,7 @@ namespace Api
                       options.TokenValidationParameters = new TokenValidationParameters()
                       {
                           ValidateIssuer = true,
-                          //   ValidateLifetime = true,
+                          ValidateLifetime = true,
                           ValidateAudience = true,
                           ValidateIssuerSigningKey = true,
                           ValidIssuer = Configuration["JWT:Issuer"],
@@ -46,8 +48,12 @@ namespace Api
                           )
                       };
                   });
+            services.AddAutoMapper(new Assembly[] { typeof(AutoMapperProfile).Assembly });
             services.AddTransient(typeof(IServiceService), typeof(ServiceService));
             services.AddTransient(typeof(IAccountService), typeof(AccountService));
+            services.AddTransient(typeof(IReservationService), typeof(ReservationService));
+            services.AddTransient(typeof(IEmployeeService), typeof(EmployeeService));
+            services.AddTransient(typeof(IEmployeeShiftService), typeof(EmployeeShiftService));
             services.AddControllers();
         }
 
@@ -62,6 +68,7 @@ namespace Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

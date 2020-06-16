@@ -28,6 +28,7 @@ namespace ReservationManagementApp.Controllers
     public class AccountController : Controller
     {
         private readonly IConfiguration _configuration;
+     
         public HttpServicesReponse _clientService = new HttpServicesReponse();
         public AccountController(IConfiguration configuration)
         {
@@ -65,6 +66,9 @@ namespace ReservationManagementApp.Controllers
                         userDb.Email = userJWT.Email;
                         userDb.IdRole = userJWT.IdRole;
                         userDb.Name = userJWT.Name;
+                        userDb.Surname = userJWT.Surname;
+                        userDb.Surname2 = userJWT.Surname2;
+                        userDb.Id = userJWT.Id;
                         HttpContext.Session.SetString("User", JsonSerializer.Serialize(userDb));
                         HttpContext.Session.SetString("Jwt", JsonSerializer.Serialize(responseBody));
                         HttpContext.Session.SetString("UserName", userDb.Name);

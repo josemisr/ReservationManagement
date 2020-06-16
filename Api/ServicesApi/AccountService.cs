@@ -50,6 +50,7 @@ namespace Api.ServicesApi
 
         public string Register(Users user)
         {
+            user.IdRole = 2;
             Users userDb = db.CreateUser(user);
             if (userDb != null)
             {

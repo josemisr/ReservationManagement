@@ -34,7 +34,7 @@ namespace Api.Controllers
             var result = this._accountServices.Login(userLogin);
 
             if (!String.IsNullOrEmpty(result))
-            {  
+            {
                 return Ok(result);
             }
             else
@@ -60,12 +60,11 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public List<Users> Get()
+        public List<Users> GetUsers()
         {
             List<Users> usersDb = _accountServices.GetUsers();
             return usersDb;
         }
 
-       
     }
 }
