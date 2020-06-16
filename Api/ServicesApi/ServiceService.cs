@@ -1,5 +1,6 @@
 ﻿using Api.IServicesApi;
 using Api.Models;
+using AutoMapper;
 using DataAccess.Models;
 using DataAccess.Operations;
 using System;
@@ -12,15 +13,22 @@ namespace Api.ServicesApi
     public class ServiceService:IServiceService
     {
         private ServiceOperations db = new ServiceOperations();
-        public List<Services> GetServices()
+        private readonly IMapper _mapper;
+        public ServiceService(IMapper mapper)
         {
-            return db.getAllServices();
+            _mapper = mapper;
         }
-        public Services GetServiceById(int id)
+        public List<ServiceDto> GetServices() 
         {
-            return db.GetByPk(id);
+            var result = db.GetAllServices();
+            return _mapper.Map<List<Services>, List<ServiceDto>>(result);
         }
-        public Services AddService(ServiceDto servicesDto)
+        public ServiceDto GetServiceById(int id)
+        {
+            var result= db.GetByPk(id);
+            return _mapper.Map<Services, ServiceDto>(result);
+        }
+        public ServiceDto AddService(ServiceDto servicesDto)
         {
             Services servicesDb = new Services();
             servicesDb.Id = servicesDto.Id;
@@ -29,9 +37,9 @@ namespace Api.ServicesApi
             servicesDb.Price = servicesDto.Price;
             servicesDb.Description = servicesDto.Description;
             var result = db.CreateService(servicesDb);
-            return result;
+            return _mapper.Map<Services, ServiceDto>(result);
         }
-        public Services UpdateService(ServiceDto servicesDto)
+        public ServiceDto UpdateService(ServiceDto servicesDto)
         {
             Services servicesDb = new Services();
             servicesDb.Id = servicesDto.Id;
@@ -40,12 +48,12 @@ namespace Api.ServicesApi
             servicesDb.Price = servicesDto.Price;
             servicesDb.Description = servicesDto.Description;
             var result = db.UpdateService(servicesDb);
-            return result;
+            return _mapper.Map<Services, ServiceDto>(result);
         }
-        public Services RemoveService(int id)
+        public ServiceDto RemoveService(int id)
         {
             var result = db.DeleteService(id);
-            return result;
+            return _mapper.Map<Services, ServiceDto>(result);
         }
     }
 }
