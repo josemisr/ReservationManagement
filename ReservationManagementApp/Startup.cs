@@ -30,12 +30,12 @@ namespace ReservationManagementApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddDbContext<ReservationManagementDbContext>();
-          
+            //services.AddDbContext<ReservationManagementDbContext>();
+
             services.AddControllersWithViews(options =>
             {
                 options.Filters.Add(typeof(VerifySession));
-               // options.Filters.Add(typeof(CustomAuthFilter));
+                // options.Filters.Add(typeof(CustomAuthFilter));
             });
             services.AddAuthorization(options =>
             {
@@ -55,10 +55,10 @@ namespace ReservationManagementApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-       
+
             if (env.IsDevelopment())
             {
-               // app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
                 app.UseExceptionHandler("/Global/Error");
                 app.UseDatabaseErrorPage();
             }
@@ -77,8 +77,8 @@ namespace ReservationManagementApp
             app.UseAuthentication();
             app.UseSession();//Orden importante, para que pueda ser usada en el Authorization (policy)
             app.UseAuthorization();
-           
-           
+
+
 
             app.UseEndpoints(endpoints =>
             {

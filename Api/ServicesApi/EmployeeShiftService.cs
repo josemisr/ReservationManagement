@@ -3,14 +3,11 @@ using Api.Models;
 using AutoMapper;
 using DataAccess.Models;
 using DataAccess.Operations;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Api.ServicesApi
 {
-    public class EmployeeShiftService:IEmployeeShiftService
+    public class EmployeeShiftService : IEmployeeShiftService
     {
         private EmployeeShiftOperations db = new EmployeeShiftOperations();
         private readonly IMapper _mapper;
@@ -25,27 +22,19 @@ namespace Api.ServicesApi
         }
         public EmployeeShiftDto GetEmployeeShiftById(int id)
         {
-            var result= db.GetByPk(id);
+            var result = db.GetByPk(id);
             return _mapper.Map<EmployeesShifts, EmployeeShiftDto>(result);
         }
         public EmployeeShiftDto AddEmployeeShift(EmployeeShiftDto employeeShiftDto)
         {
-            EmployeesShifts employeesShiftsDb = new EmployeesShifts();
-            employeesShiftsDb.Id = employeeShiftDto.Id;
-            employeesShiftsDb.IdEmployee = employeeShiftDto.IdEmployee;
-            employeesShiftsDb.InitHour = employeeShiftDto.InitHour;
-            employeesShiftsDb.WorkDay = employeeShiftDto.WorkDay;
-            var result = db.UpdateEmployeeShift(employeesShiftsDb);
+            EmployeesShifts employeesShiftDb = _mapper.Map<EmployeeShiftDto, EmployeesShifts>(employeeShiftDto);
+            var result = db.CreateEmployeeShift(employeesShiftDb);
             return _mapper.Map<EmployeesShifts, EmployeeShiftDto>(result);
         }
         public EmployeeShiftDto UpdateEmployeeShift(EmployeeShiftDto employeeShiftDto)
         {
-            EmployeesShifts employeesShiftsDb = new EmployeesShifts();
-            employeesShiftsDb.Id = employeeShiftDto.Id;
-            employeesShiftsDb.IdEmployee = employeeShiftDto.IdEmployee;
-            employeesShiftsDb.InitHour = employeeShiftDto.InitHour;
-            employeesShiftsDb.WorkDay = employeeShiftDto.WorkDay;
-            var result = db.UpdateEmployeeShift(employeesShiftsDb);
+            EmployeesShifts employeesShiftDb = _mapper.Map<EmployeeShiftDto, EmployeesShifts>(employeeShiftDto);
+            var result = db.UpdateEmployeeShift(employeesShiftDb);
             return _mapper.Map<EmployeesShifts, EmployeeShiftDto>(result);
         }
         public EmployeeShiftDto RemoveEmployeeShift(int id)

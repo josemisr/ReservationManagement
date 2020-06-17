@@ -17,10 +17,13 @@ namespace Api
             CreateMap<Services, ServiceDto>();
             CreateMap<Employees, EmployeeDto>();
             CreateMap<EmployeesShifts, EmployeeShiftDto>();
+            CreateMap<EmployeeShiftDto, EmployeesShifts>();
             CreateMap<Users, UserDto>();
             CreateMap<EmployeesShifts, EmployeeShiftSimpleDto>();
             CreateMap<Reservations, ReservationSimpleDto>();
-            CreateMap<ServicesEmployees, ServiceEmployeeSimpeDto>();
+            CreateMap<ServicesEmployees, ServiceEmployeeSimpleDto>();
+            CreateMap<ServicesEmployees, ServiceEmployeeDto>();
+            CreateMap<ServiceEmployeeDto, ServicesEmployees>();
         }
     
 }

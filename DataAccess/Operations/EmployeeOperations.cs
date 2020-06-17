@@ -25,6 +25,22 @@ namespace DataAccess.Operations
         public Employees DeleteEmployee(int id)
         {
             var employee = GetByPk(id);
+            var servicesEmployeesList = db.ServicesEmployees.Where(elem => elem.IdEmployee == id);
+            var employeesShiftsList = db.EmployeesShifts.Where(elem=> elem.IdEmployee ==id);
+            var reservationsList = db.Reservations.Where(elem => elem.IdEmployee == id);
+            foreach (var employeeShift in employeesShiftsList)
+            {
+                db.Remove(employeeShift);
+            }
+            foreach (var servicesEmployee in servicesEmployeesList)
+            {
+                db.Remove(servicesEmployee);
+            }
+            foreach (var reservation in reservationsList)
+            {
+                db.Remove(reservation);
+            }
+
             db.Remove(employee);
             db.SaveChanges();
             return employee;

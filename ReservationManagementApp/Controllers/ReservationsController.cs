@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using ReservationManagementApp.Models.Dto;
@@ -27,9 +26,9 @@ namespace ReservationManagementApp.Controllers
         // GET: Reservations
         public IActionResult Index()
         {
-            string responseBody = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi").GetAwaiter().GetResult();
-            List<ServiceDto> listServices = JsonConvert.DeserializeObject<List<ServiceDto>>(responseBody);
-            ViewData["IdService"] = new SelectList(listServices, "Id", "Name");
+            string responseBodyServiceList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi").GetAwaiter().GetResult();
+            List<ServiceDto> servicesList = JsonConvert.DeserializeObject<List<ServiceDto>>(responseBodyServiceList);
+            ViewData["IdService"] = new SelectList(servicesList, "Id", "Name");
 
             if (TempData["Date"] != null && !String.IsNullOrEmpty(TempData["Date"].ToString()))
                 ModelState.AddModelError("reservation.Date", TempData["Date"].ToString());
@@ -43,10 +42,10 @@ namespace ReservationManagementApp.Controllers
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
             {
                 UserDto user = JsonConvert.DeserializeObject<UserDto>(HttpContext.Session.GetString("User"));
-               
-                string responseBodyReservations = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ReservationApi").GetAwaiter().GetResult();
-                List<ReservationDto> listReservations = JsonConvert.DeserializeObject<List<ReservationDto>>(responseBodyReservations);
-                reservationModel.Reservations = listReservations.Where(elem => elem.IdUser == user.Id && elem.Date >= DateTime.Today);
+
+                string responseBodyReservationsList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ReservationApi").GetAwaiter().GetResult();
+                List<ReservationDto> reservationsList = JsonConvert.DeserializeObject<List<ReservationDto>>(responseBodyReservationsList);
+                reservationModel.Reservations = reservationsList.Where(elem => elem.IdUser == user.Id && elem.Date >= DateTime.Today);
             }
 
             return View(reservationModel);
@@ -56,11 +55,11 @@ namespace ReservationManagementApp.Controllers
             string responseBodyService = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi/" + reservation.IdService).GetAwaiter().GetResult();
             ServiceDto service = JsonConvert.DeserializeObject<ServiceDto>(responseBodyService);
             reservation.IdServiceNavigation = service;
-        
+
             string responseBodyEmployee = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeApi/" + reservation.IdEmployee).GetAwaiter().GetResult();
             EmployeeDto employee = JsonConvert.DeserializeObject<EmployeeDto>(responseBodyEmployee);
             reservation.IdEmployeeNavigation = employee;
-         
+
             string responseBodyEmployeesList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeApi").GetAwaiter().GetResult();
             List<EmployeeDto> employeesList = JsonConvert.DeserializeObject<List<EmployeeDto>>(responseBodyEmployeesList);
             ViewData["IdEmployee"] = new SelectList(employeesList
@@ -126,14 +125,14 @@ namespace ReservationManagementApp.Controllers
             ViewData["IdService"] = new SelectList(servicesList, "Id", "Name", reservation.IdService);
 
             string responseBodyUserList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/UserApi").GetAwaiter().GetResult();
-            List<UserDto> employeeUserList = JsonConvert.DeserializeObject<List<UserDto>>(responseBodyUserList);
-            ViewData["IdUser"] = new SelectList(employeeUserList, "Id", "Email", reservation.IdUser);
+            List<UserDto> userList = JsonConvert.DeserializeObject<List<UserDto>>(responseBodyUserList);
+            ViewData["IdUser"] = new SelectList(userList, "Id", "Email", reservation.IdUser);
             ReservationModel reseservationModel = new ReservationModel();
             reseservationModel.Reservation = reservation;
 
             string responseBodyReservationList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ReservationApi").GetAwaiter().GetResult();
-            List<ReservationDto> employeeReservationList = JsonConvert.DeserializeObject<List<ReservationDto>>(responseBodyReservationList);
-            reseservationModel.Reservations = employeeReservationList;
+            List<ReservationDto> reservationList = JsonConvert.DeserializeObject<List<ReservationDto>>(responseBodyReservationList);
+            reseservationModel.Reservations = reservationList;
             return View(reseservationModel);
         }
 
@@ -145,8 +144,8 @@ namespace ReservationManagementApp.Controllers
                 return NotFound();
             }
             string responseBodyReservationList = await this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ReservationApi");
-            List<ReservationDto> employeeReservationList = JsonConvert.DeserializeObject<List<ReservationDto>>(responseBodyReservationList);
-            var reservations = employeeReservationList
+            List<ReservationDto> reservationList = JsonConvert.DeserializeObject<List<ReservationDto>>(responseBodyReservationList);
+            var reservations = reservationList
                 .FirstOrDefault(m => m.Id == id);
             if (reservations == null)
             {
@@ -176,9 +175,9 @@ namespace ReservationManagementApp.Controllers
         private List<ReservationDto> GetCurrentsReservations(ReservationDto reservation)
         {
             string responseBodyReservationList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ReservationApi").GetAwaiter().GetResult();
-            List<ReservationDto> employeeReservationList = JsonConvert.DeserializeObject<List<ReservationDto>>(responseBodyReservationList);
+            List<ReservationDto> reservationList = JsonConvert.DeserializeObject<List<ReservationDto>>(responseBodyReservationList);
 
-            List<ReservationDto> currentReservations = employeeReservationList
+            List<ReservationDto> currentReservations = reservationList
                .Where(elem => elem.IdEmployee == reservation.IdEmployee &&
                elem.Date.Date == reservation.Date.Date).ToList();
             return currentReservations;
@@ -188,9 +187,9 @@ namespace ReservationManagementApp.Controllers
         {
             List<ReservationDto> possibleReservations = new List<ReservationDto>();
 
-            string responseBodyEmployeessShiftList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeShiftApi").GetAwaiter().GetResult();
-            List<EmployeeShiftDto> employeeReservationList = JsonConvert.DeserializeObject<List<EmployeeShiftDto>>(responseBodyEmployeessShiftList);
-            List<EmployeeShiftDto> employeesShiftsList = employeeReservationList.Where(elem => elem.IdEmployee == reservation.IdEmployee && elem.WorkDay == reservation.Date).OrderBy(elem => elem.InitHour).ToList();
+            string responseBodyEmployeesShiftList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeShiftApi").GetAwaiter().GetResult();
+            List<EmployeeShiftDto> employeesShiftsList = JsonConvert.DeserializeObject<List<EmployeeShiftDto>>(responseBodyEmployeesShiftList);
+            employeesShiftsList = employeesShiftsList.Where(elem => elem.IdEmployee == reservation.IdEmployee && elem.WorkDay == reservation.Date).OrderBy(elem => elem.InitHour).ToList();
 
             foreach (EmployeeShiftDto employeeShifts in employeesShiftsList)
                 if (employeeShifts != null)
@@ -214,8 +213,8 @@ namespace ReservationManagementApp.Controllers
         private bool ReservationsExists(int id)
         {
             string responseBodyReservationList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ReservationApi/" + id).GetAwaiter().GetResult();
-            List<ReservationDto> employeeReservationList = JsonConvert.DeserializeObject<List<ReservationDto>>(responseBodyReservationList);
-            return employeeReservationList.Any(e => e.Id == id);
+            List<ReservationDto> reservationList = JsonConvert.DeserializeObject<List<ReservationDto>>(responseBodyReservationList);
+            return reservationList.Any(e => e.Id == id);
         }
     }
 }

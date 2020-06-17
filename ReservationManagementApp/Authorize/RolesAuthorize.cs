@@ -1,24 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using ReservationManagementApp.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using ReservationManagementApp.Models.Dto;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ReservationManagementApp.Authorize
 {
-
     public class RolesAuthorizeRequirement : IAuthorizationRequirement
     {
         public RolesAuthorizeRequirement(int role)
         {
             Role = role;
         }
-
         public int Role { get; private set; }
     }
 
@@ -39,7 +32,7 @@ namespace ReservationManagementApp.Authorize
                 }
                 else
                 {
-                    Users user = JsonSerializer.Deserialize<Users>(_httpContextAccessor.HttpContext.Session.GetString("User"));
+                    UserDto user = JsonSerializer.Deserialize<UserDto>(_httpContextAccessor.HttpContext.Session.GetString("User"));
                     if (user.IdRole == requirement.Role)
                     {
                         context.Succeed(requirement);

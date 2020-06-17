@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 namespace Api.Controllers
 {
     [Route("api/[controller]")]
+
     [ApiController]
     public class ServiceApiController : ControllerBase
     {

@@ -5,20 +5,22 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ReservationManagementApp.Models;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using ReservationManagementApp.Models.Dto;
 using ReservationManagementApp.Models.ServiceEmployeeModel;
+using ReservationManagementApp.ServicesApp;
 
 namespace ReservationManagementApp.Controllers
 {
     [Authorize(Policy = "Admin")]
     public class ServicesEmployeesController : Controller
     {
-        private readonly ReservationManagementDbContext _context;
-
-        public ServicesEmployeesController(ReservationManagementDbContext context)
+        private readonly IConfiguration _configuration;
+        public HttpServicesReponse _clientService = new HttpServicesReponse();
+        public ServicesEmployeesController(IConfiguration configuration)
         {
-            _context = context;
+            this._configuration = configuration;
         }
 
         // GET: ServicesEmployees
@@ -27,12 +29,22 @@ namespace ReservationManagementApp.Controllers
             if (TempData["Error"] != null && !String.IsNullOrEmpty(TempData["Error"].ToString()))
                 ModelState.AddModelError("Error", TempData["Error"].ToString());
             TempData.Clear();
-            var servicesEmployeesList = _context.ServicesEmployees.Where(elem => elem.IdEmployee == idEmployee).Include(s => s.IdEmployeeNavigation).Include(s => s.IdServiceNavigation);
-            ViewData["IdService"] = new SelectList(_context.Services, "Id", "Name");
+
+
+            string responseBodyServicesEmployeeList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceEmployeeApi").GetAwaiter().GetResult();
+            List<ServiceEmployeeDto> serviceEmployeeListDto = JsonConvert.DeserializeObject<List<ServiceEmployeeDto>>(responseBodyServicesEmployeeList);
+            var servicesEmployeesList = serviceEmployeeListDto.Where(elem => elem.IdEmployee == idEmployee);
+
+            string responseBodyServiceList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi").GetAwaiter().GetResult();
+            List<ServiceDto> serviceDto = JsonConvert.DeserializeObject<List<ServiceDto>>(responseBodyServiceList);
+            ViewData["IdService"] = new SelectList(serviceDto, "Id", "Name");
             ServiceEmployeeModel serviceEmployeeModel = new ServiceEmployeeModel();
             serviceEmployeeModel.ServicesEmployeesList = servicesEmployeesList;
-            serviceEmployeeModel.ServiceEmployee = new ServicesEmployees();
-            serviceEmployeeModel.ServiceEmployee.IdEmployeeNavigation = _context.Employees.FirstOrDefault(elem => elem.Id == idEmployee.Value);
+            serviceEmployeeModel.ServiceEmployee = new ServiceEmployeeDto();
+
+            string responseBodyEmployee= this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeApi/" + idEmployee.Value).GetAwaiter().GetResult();
+            EmployeeDto employeeDto = JsonConvert.DeserializeObject<EmployeeDto>(responseBodyEmployee);
+            serviceEmployeeModel.ServiceEmployee.IdEmployeeNavigation = employeeDto;
             serviceEmployeeModel.ServiceEmployee.IdEmployee = idEmployee.Value;
             return View(serviceEmployeeModel);
         }
@@ -44,10 +56,15 @@ namespace ReservationManagementApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ServiceEmployeeModel serviceEmployeeModel)
         {
-            ServicesEmployees serviceEmployee = new ServicesEmployees();
+            ServiceEmployeeDto serviceEmployee = new ServiceEmployeeDto();
             serviceEmployee.IdEmployee = serviceEmployeeModel.ServiceEmployee.IdEmployee;
             serviceEmployee.IdService = serviceEmployeeModel.ServiceEmployee.IdService;
-            if (_context.ServicesEmployees.FirstOrDefault(elem => elem.IdEmployee == serviceEmployee.IdEmployee && elem.IdService == serviceEmployee.IdService) != null)
+
+            string responseBodyServicesEmployeeList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceEmployeeApi").GetAwaiter().GetResult();
+            List<ServiceEmployeeDto> serviceEmployeeListDto = JsonConvert.DeserializeObject<List<ServiceEmployeeDto>>(responseBodyServicesEmployeeList);
+
+
+            if (serviceEmployeeListDto.FirstOrDefault(elem => elem.IdEmployee == serviceEmployee.IdEmployee && elem.IdService == serviceEmployee.IdService) != null)
             {
                 TempData["Error"] = "This services is assigned";
                 return RedirectToAction(nameof(Index), new
@@ -57,15 +74,17 @@ namespace ReservationManagementApp.Controllers
             }
             if (serviceEmployeeModel.ServiceEmployee.IdService != 0)
             {
-                _context.Add(serviceEmployee);
-                await _context.SaveChangesAsync();
+                string responseBodyServicesEmployee = await this._clientService.PostResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceEmployeeApi", JsonConvert.SerializeObject(serviceEmployee));
+                ServiceEmployeeDto employeeDto = JsonConvert.DeserializeObject<ServiceEmployeeDto>(responseBodyServicesEmployee);
                 return RedirectToAction(nameof(Index), new
                 {
                     idEmployee = serviceEmployee.IdEmployee
                 });
             }
 
-            ViewData["IdService"] = new SelectList(_context.Services, "Id", "Name", serviceEmployee.IdService);
+            string responseBodyServicesList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi").GetAwaiter().GetResult();
+            List<ServiceDto> serviceDto = JsonConvert.DeserializeObject<List<ServiceDto>>(responseBodyServicesList);
+            ViewData["IdService"] = new SelectList(serviceDto, "Id", "Name", serviceEmployee.IdService);
             return RedirectToAction(nameof(Index), new
             {
                 idEmployee = serviceEmployee.IdEmployee
@@ -80,10 +99,8 @@ namespace ReservationManagementApp.Controllers
                 return NotFound();
             }
 
-            var serviceEmployee = await _context.ServicesEmployees
-                .Include(r => r.IdEmployeeNavigation)
-                .Include(r => r.IdServiceNavigation)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            string responseBodyServicesEmployeeList = await this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceEmployeeApi/" + id);
+            ServiceEmployeeDto serviceEmployee = JsonConvert.DeserializeObject<ServiceEmployeeDto>(responseBodyServicesEmployeeList);
             if (serviceEmployee == null)
             {
                 return NotFound();
@@ -98,9 +115,8 @@ namespace ReservationManagementApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var serviceEmployee = await _context.ServicesEmployees.FindAsync(id);
-            _context.ServicesEmployees.Remove(serviceEmployee);
-            await _context.SaveChangesAsync();
+            string responseBodyServicesEmployeeList =await this._clientService.DeleteResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceEmployeeApi/" + id);
+            ServiceEmployeeDto serviceEmployee = JsonConvert.DeserializeObject<ServiceEmployeeDto>(responseBodyServicesEmployeeList);
             return RedirectToAction(nameof(Index), new
             {
                 idEmployee = serviceEmployee.IdEmployee
@@ -109,7 +125,9 @@ namespace ReservationManagementApp.Controllers
 
         private bool ServicesEmployeesExists(int id)
         {
-            return _context.ServicesEmployees.Any(e => e.Id == id);
+            string responseBodyServicesEmployeeList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceEmployeeApi/" + id).GetAwaiter().GetResult();
+            ServiceEmployeeDto serviceEmployee = JsonConvert.DeserializeObject<ServiceEmployeeDto>(responseBodyServicesEmployeeList);
+            return serviceEmployee!= null;
         }
     }
 }

@@ -4,33 +4,41 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ReservationManagementApp.Models;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using ReservationManagementApp.Models.Dto;
 using ReservationManagementApp.Models.EmployeeShiftModel;
+using ReservationManagementApp.ServicesApp;
 
 namespace ReservationManagementApp.Controllers
 {
     [Authorize(Policy = "Admin")]
     public class EmployeesShiftsController : Controller
     {
-        private readonly ReservationManagementDbContext _context;
-
-        public EmployeesShiftsController(ReservationManagementDbContext context)
+        private readonly IConfiguration _configuration;
+        public HttpServicesReponse _clientService = new HttpServicesReponse();
+        public EmployeesShiftsController(IConfiguration configuration)
         {
-            _context = context;
+            this._configuration = configuration;
         }
 
         // GET: EmployeesShifts
         public IActionResult Index(int? idEmployee, DateTime? workDay)
         {
             AddModelErrors();
-            var employeesShiftsList = _context.EmployeesShifts.Where(elem => elem.IdEmployee == idEmployee
-            && ((workDay != null && elem.WorkDay == workDay) || (workDay == null && elem.WorkDay >= DateTime.Today))).OrderBy(elem => elem.WorkDay).Include(e => e.IdEmployeeNavigation);
+            string responseBodyEmployeesShiftsList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeShiftApi").GetAwaiter().GetResult();
+            List<EmployeeShiftDto> employeeShift = JsonConvert.DeserializeObject<List<EmployeeShiftDto>>(responseBodyEmployeesShiftsList);
+            var employeesShiftsList = employeeShift.Where(elem => elem.IdEmployee == idEmployee
+            && ((workDay != null && elem.WorkDay == workDay) || (workDay == null && elem.WorkDay >= DateTime.Today))).OrderBy(elem => elem.WorkDay);/*.Include(e => e.IdEmployeeNavigation);*/
             EmployeeShiftModel employeeShiftModel = new EmployeeShiftModel();
             employeeShiftModel.EmployeeShiftsList = employeesShiftsList;
-            employeeShiftModel.EmployeeShift = new EmployeesShifts();
-            employeeShiftModel.EmployeeShift.IdEmployeeNavigation = _context.Employees.FirstOrDefault(elem => elem.Id == idEmployee.Value);
+            employeeShiftModel.EmployeeShift = new EmployeeShiftDto();
+
+            string responseBodyEmployee = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeApi/" + idEmployee).GetAwaiter().GetResult();
+            EmployeeDto employeeDto = JsonConvert.DeserializeObject<EmployeeDto>(responseBodyEmployee);
+
+
+            employeeShiftModel.EmployeeShift.IdEmployeeNavigation = employeeDto;
             employeeShiftModel.EmployeeShift.IdEmployee = idEmployee.Value;
             employeeShiftModel.EmployeeShift.WorkDay = workDay == null ? DateTime.Now : workDay.Value;
             employeeShiftModel.EndDate = workDay == null ? DateTime.Now : workDay.Value;
@@ -67,16 +75,16 @@ namespace ReservationManagementApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EmployeeShiftModel employeeShiftModel)
         {
-            List<EmployeesShifts> allShiftsToAdd = GetShiftsForEmployee(employeeShiftModel);
+            List<EmployeeShiftDto> allShiftsToAdd = GetShiftsForEmployee(employeeShiftModel);
             if (ValidateemployeeShiftModel(employeeShiftModel))
             {
                 if (allShiftsToAdd.Count() > 0)//Validaciones
                 {
-                    foreach (EmployeesShifts shift in allShiftsToAdd)
+                    foreach (EmployeeShiftDto shift in allShiftsToAdd)
                     {
                         if (ValidateShift(shift))
                         {
-                            _context.Add(shift);
+                            string responseBodyEmployeeShift = await this._clientService.PostResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeShiftApi", JsonConvert.SerializeObject(shift));
                         }
                         else
                         {
@@ -86,7 +94,6 @@ namespace ReservationManagementApp.Controllers
                             });
                         }
                     }
-                    await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index), new
                     {
                         idEmployee = employeeShiftModel.EmployeeShift.IdEmployee
@@ -106,10 +113,9 @@ namespace ReservationManagementApp.Controllers
             {
                 return NotFound();
             }
-
-            var employeesShifts = await _context.EmployeesShifts
-                .Include(e => e.IdEmployeeNavigation)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            string responseBodyEmployeeShift = await this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeShiftApi/" + id);
+            EmployeeShiftDto employeeShift = JsonConvert.DeserializeObject<EmployeeShiftDto>(responseBodyEmployeeShift);
+            var employeesShifts = employeeShift;
             if (employeesShifts == null)
             {
                 return NotFound();
@@ -123,23 +129,24 @@ namespace ReservationManagementApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var employeesShifts = await _context.EmployeesShifts.FindAsync(id);
-            _context.EmployeesShifts.Remove(employeesShifts);
-            await _context.SaveChangesAsync();
+            string responseBodyEmployeeShift = await this._clientService.DeleteResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeShiftApi/" + id);
+            EmployeeShiftDto employeeShift = JsonConvert.DeserializeObject<EmployeeShiftDto>(responseBodyEmployeeShift);
             return RedirectToAction(nameof(Index), new
             {
-                idEmployee = employeesShifts.IdEmployee
+                idEmployee = employeeShift.IdEmployee
             });
         }
 
         private bool EmployeesShiftsExists(int id)
         {
-            return _context.EmployeesShifts.Any(e => e.Id == id);
+            string responseBodyEmployeeShift = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeShiftApi/" + id).GetAwaiter().GetResult();
+            EmployeeDto employeeShift = JsonConvert.DeserializeObject<EmployeeDto>(responseBodyEmployeeShift);
+            return employeeShift != null;
         }
 
-        private List<EmployeesShifts> GetShiftsForEmployee(EmployeeShiftModel employeeShiftModel)
+        private List<EmployeeShiftDto> GetShiftsForEmployee(EmployeeShiftModel employeeShiftModel)
         {
-            List<EmployeesShifts> employeesShifts = new List<EmployeesShifts>();
+            List<EmployeeShiftDto> employeesShifts = new List<EmployeeShiftDto>();
             var dates = new List<DateTime>();
 
             for (var dt = employeeShiftModel.EmployeeShift.WorkDay; dt <= employeeShiftModel.EndDate; dt = dt.AddDays(1))
@@ -149,7 +156,7 @@ namespace ReservationManagementApp.Controllers
 
             foreach (DateTime date in dates)
             {
-                EmployeesShifts employeeShift = new EmployeesShifts();
+                EmployeeShiftDto employeeShift = new EmployeeShiftDto();
                 employeeShift.InitHour = employeeShiftModel.EmployeeShift.InitHour;
                 employeeShift.EndHour = employeeShiftModel.EmployeeShift.EndHour;
                 employeeShift.WorkDay = date;
@@ -201,9 +208,11 @@ namespace ReservationManagementApp.Controllers
                 ModelState.AddModelError("ErrorSameHour", TempData["ErrorSameHour"].ToString());
             TempData.Clear();
         }
-        private bool ValidateShift(EmployeesShifts shift)
+        private bool ValidateShift(EmployeeShiftDto shift)
         {
-            if (_context.EmployeesShifts.FirstOrDefault(elem => elem.IdEmployee == shift.IdEmployee
+            string responseBodyEmployeeShift = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeShiftApi").GetAwaiter().GetResult();
+            List<EmployeeShiftDto> employeeShift = JsonConvert.DeserializeObject<List<EmployeeShiftDto>>(responseBodyEmployeeShift);
+            if (employeeShift.FirstOrDefault(elem => elem.IdEmployee == shift.IdEmployee
              && elem.WorkDay == shift.WorkDay
              && ((elem.InitHour < shift.InitHour && elem.EndHour > shift.InitHour)
              || (elem.InitHour < shift.EndHour && elem.EndHour > shift.EndHour)

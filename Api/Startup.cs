@@ -54,6 +54,7 @@ namespace Api
             services.AddTransient(typeof(IReservationService), typeof(ReservationService));
             services.AddTransient(typeof(IEmployeeService), typeof(EmployeeService));
             services.AddTransient(typeof(IEmployeeShiftService), typeof(EmployeeShiftService));
+            services.AddTransient(typeof(IServiceEmployeeService), typeof(ServiceEmployeeService));
             services.AddControllers();
         }
 

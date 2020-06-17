@@ -1,29 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ReservationManagementApp.Models;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using ReservationManagementApp.Models.Dto;
+using ReservationManagementApp.ServicesApp;
 
 namespace ReservationManagementApp.Controllers
 {
     [Authorize(Policy = "Admin")]
     public class EmployeesController : Controller
     {
-        private readonly ReservationManagementDbContext _context;
-
-        public EmployeesController(ReservationManagementDbContext context)
+        private readonly IConfiguration _configuration;
+        public HttpServicesReponse _clientService = new HttpServicesReponse();
+        public EmployeesController(IConfiguration configuration)
         {
-            _context = context;
+            this._configuration = configuration;
         }
 
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employees.ToListAsync());
+            string responseBodyEmployeeList = await this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeApi");
+            List<EmployeeDto> employeeList = JsonConvert.DeserializeObject<List<EmployeeDto>>(responseBodyEmployeeList);
+            return View(employeeList);
         }
 
         // GET: Employees/Details/5
@@ -34,8 +36,8 @@ namespace ReservationManagementApp.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees
-                .FirstOrDefaultAsync(m => m.Id == id);
+            string responseBodyEmployee = await this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeApi/" + id);
+            EmployeeDto employee = JsonConvert.DeserializeObject<EmployeeDto>(responseBodyEmployee);
             if (employee == null)
             {
                 return NotFound();
@@ -55,16 +57,20 @@ namespace ReservationManagementApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Surname,Surname2,IdCard")] Employees employee)
+        public async Task<IActionResult> Create([Bind("Id,Name,Surname,Surname2,IdCard")] EmployeeDto employee)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(employee);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Edit), new
+                string responseBodyEmployee = await this._clientService.PostResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeApi", JsonConvert.SerializeObject(employee));
+                EmployeeDto employeeDto = JsonConvert.DeserializeObject<EmployeeDto>(responseBodyEmployee);
+                if (employeeDto != null)
                 {
-                    id = employee.Id
-                });
+                    return RedirectToAction(nameof(Edit), new
+                    {
+                        id = employeeDto.Id
+                    });
+                }
+                else { return View(employee); }
 
             }
             return View(employee);
@@ -78,7 +84,8 @@ namespace ReservationManagementApp.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees.FindAsync(id);
+            string responseBodyEmployee = await this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeApi/" + id);
+            EmployeeDto employee = JsonConvert.DeserializeObject<EmployeeDto>(responseBodyEmployee);
             if (employee == null)
             {
                 return NotFound();
@@ -91,23 +98,18 @@ namespace ReservationManagementApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Surname,Surname2,IdCard")] Employees employees)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Surname,Surname2,IdCard")] EmployeeDto employee)
         {
-            if (id != employees.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(employees);
-                    await _context.SaveChangesAsync();
+                    string responseBodyEmployee = await this._clientService.PutResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeApi/" + employee.Id, JsonConvert.SerializeObject(employee));
+                    EmployeeDto employeeDto = JsonConvert.DeserializeObject<EmployeeDto>(responseBodyEmployee);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EmployeesExists(employees.Id))
+                    if (!EmployeesExists(employee.Id))
                     {
                         return NotFound();
                     }
@@ -118,7 +120,7 @@ namespace ReservationManagementApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(employees);
+            return View(employee);
         }
 
         // GET: Employees/Delete/5
@@ -129,14 +131,14 @@ namespace ReservationManagementApp.Controllers
                 return NotFound();
             }
 
-            var employees = await _context.Employees
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (employees == null)
+            string responseBodyEmployee = await this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeApi/" + id);
+            EmployeeDto employee = JsonConvert.DeserializeObject<EmployeeDto>(responseBodyEmployee);
+            if (employee == null)
             {
                 return NotFound();
             }
 
-            return View(employees);
+            return View(employee);
         }
 
         // POST: Employees/Delete/5
@@ -144,27 +146,16 @@ namespace ReservationManagementApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var employee = _context.Employees.Where(elem => elem.Id == id).Include(s => s.Reservations).Include(s => s.ServicesEmployees).Include(s => s.EmployeesShifts).FirstOrDefault();
-            foreach (Reservations reservation in employee.Reservations)
-            {
-                _context.Reservations.Remove(reservation);
-            }
-            foreach (ServicesEmployees service in employee.ServicesEmployees)
-            {
-                _context.ServicesEmployees.Remove(service);
-            }
-            foreach (EmployeesShifts shift in employee.EmployeesShifts)
-            {
-                _context.EmployeesShifts.Remove(shift);
-            }
-            _context.Employees.Remove(employee);
-            _context.SaveChanges();
+            string responseBodyEmployee = this._clientService.DeleteResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeApi/" + id).GetAwaiter().GetResult();
+            EmployeeDto employee = JsonConvert.DeserializeObject<EmployeeDto>(responseBodyEmployee);
             return RedirectToAction(nameof(Index));
         }
 
         private bool EmployeesExists(int id)
         {
-            return _context.Employees.Any(e => e.Id == id);
+            string responseBodyEmployee = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeApi/" + id).GetAwaiter().GetResult();
+            EmployeeDto employee = JsonConvert.DeserializeObject<EmployeeDto>(responseBodyEmployee);
+            return employee != null;
         }
     }
 }
