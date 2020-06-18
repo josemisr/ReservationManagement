@@ -3,10 +3,7 @@ using Api.Models;
 using AutoMapper;
 using DataAccess.Models;
 using DataAccess.Operations;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Api.ServicesApi
 {
@@ -30,23 +27,13 @@ namespace Api.ServicesApi
         }
         public ServiceDto AddService(ServiceDto servicesDto)
         {
-            Services servicesDb = new Services();
-            servicesDb.Id = servicesDto.Id;
-            servicesDb.Image = servicesDto.Image;
-            servicesDb.Name = servicesDto.Name;
-            servicesDb.Price = servicesDto.Price;
-            servicesDb.Description = servicesDto.Description;
+            Services servicesDb = _mapper.Map<ServiceDto, Services>(servicesDto);
             var result = db.CreateService(servicesDb);
             return _mapper.Map<Services, ServiceDto>(result);
         }
         public ServiceDto UpdateService(ServiceDto servicesDto)
         {
-            Services servicesDb = new Services();
-            servicesDb.Id = servicesDto.Id;
-            servicesDb.Image = servicesDto.Image;
-            servicesDb.Name = servicesDto.Name;
-            servicesDb.Price = servicesDto.Price;
-            servicesDb.Description = servicesDto.Description;
+            Services servicesDb = _mapper.Map<ServiceDto, Services>(servicesDto);
             var result = db.UpdateService(servicesDb);
             return _mapper.Map<Services, ServiceDto>(result);
         }

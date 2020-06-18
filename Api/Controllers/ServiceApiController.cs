@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Api.IServicesApi;
 using Api.Models;
-using Api.ServicesApi;
-using DataAccess.Models;
-using DataAccess.Operations;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace Api.Controllers
 {
     [Route("api/[controller]")]
-
+    [Authorize(Roles = "Admin")]
     [ApiController]
     public class ServiceApiController : ControllerBase
     {

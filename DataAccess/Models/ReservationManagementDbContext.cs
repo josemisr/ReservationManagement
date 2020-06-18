@@ -85,16 +85,14 @@ namespace DataAccess.Models
 
             modelBuilder.Entity<Roles>(entity =>
             {
-                entity.Property(e => e.Descripción).HasMaxLength(250);
+                entity.Property(e => e.Description).HasMaxLength(250);
 
                 entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Services>(entity =>
             {
-                entity.Property(e => e.Description)
-                    .HasMaxLength(250)
-                    .IsFixedLength();
+                entity.Property(e => e.Description).HasMaxLength(250);
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 

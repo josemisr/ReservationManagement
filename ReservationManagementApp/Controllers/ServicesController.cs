@@ -97,6 +97,7 @@ namespace ReservationManagementApp.Controllers
 
             string responseBody = await this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi/" + id);
             ServiceDto service = JsonConvert.DeserializeObject<ServiceDto>(responseBody);
+            TempData["Image"] = service.Image;
             if (service == null)
             {
                 return NotFound();
@@ -130,6 +131,12 @@ namespace ReservationManagementApp.Controllers
                         {
                             await image.CopyToAsync(fileSteam);
                         }
+                        TempData.Remove("Image");
+                    }
+                    else
+                    {
+                        service.Image = TempData["Image"].ToString();
+                        TempData.Remove("Image");
                     }
                     string responseBody = this._clientService.PutResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi/" + id, JsonConvert.SerializeObject(service)).GetAwaiter().GetResult();
                   
