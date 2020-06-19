@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
     [ApiController]
     public class ServiceApiController : ControllerBase
     {
@@ -35,6 +34,7 @@ namespace Api.Controllers
 
         // POST: api/Service
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Post([FromBody] ServiceDto value)
         {
             var result = _serviceServices.AddService(value);
@@ -43,6 +43,7 @@ namespace Api.Controllers
 
         // PUT: api/Service/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Put(int id, [FromBody] ServiceDto value)
         {
             var result = _serviceServices.UpdateService(value);
@@ -51,6 +52,7 @@ namespace Api.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             var result = _serviceServices.RemoveService(id);

@@ -13,7 +13,6 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
     public class EmployeeShiftApiController : ControllerBase
     {
         IEmployeeShiftService _employeeShiftService;
@@ -39,6 +38,7 @@ namespace Api.Controllers
 
         // POST: api/EmployeeShift
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Post([FromBody] EmployeeShiftDto value)
         {
             var result = this._employeeShiftService.AddEmployeeShift(value);
@@ -47,6 +47,7 @@ namespace Api.Controllers
 
         // PUT: api/EmployeeShift/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Put(int id, [FromBody] EmployeeShiftDto value)
         {
             var result = this._employeeShiftService.UpdateEmployeeShift(value);
@@ -55,6 +56,7 @@ namespace Api.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             var result = this._employeeShiftService.RemoveEmployeeShift(id);

@@ -8,7 +8,6 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
     public class ServiceEmployeeApiController : ControllerBase
     {
         IServiceEmployeeService _serviceEmployeeService;
@@ -34,6 +33,7 @@ namespace Api.Controllers
 
         // POST: api/ServiceEmployeeApiController
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Post([FromBody] ServiceEmployeeDto value)
         {
             var result = this._serviceEmployeeService.AddServiceEmployee(value);
@@ -42,6 +42,7 @@ namespace Api.Controllers
 
         // PUT: api/ServiceEmployeeApiController/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Put(int id, [FromBody] ServiceEmployeeDto value)
         {
             var result = this._serviceEmployeeService.UpdateServiceEmployee(value);
@@ -50,6 +51,7 @@ namespace Api.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             var result = this._serviceEmployeeService.RemoveServiceEmployee(id);

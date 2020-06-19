@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
     [ApiController]
     public class EmployeeApiController : ControllerBase
     {
@@ -39,6 +38,7 @@ namespace Api.Controllers
 
         // POST: api/EmployeeApi
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Post([FromBody] EmployeeDto value)
         {
             var result = this._employeeService.AddEmployee(value);
@@ -47,6 +47,7 @@ namespace Api.Controllers
 
         // PUT: api/EmployeeApi/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Put(int id, [FromBody] EmployeeDto value)
         {
             var result = this._employeeService.UpdateEmployee(value);
@@ -55,6 +56,7 @@ namespace Api.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             var result = this._employeeService.RemoveEmployee(id);
