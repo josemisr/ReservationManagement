@@ -29,6 +29,15 @@ namespace Api.Controllers
             return Ok(reservations);
         }
 
+        // GET: api/ReservationApi/Availability/5
+        [HttpGet, Route("Availability")]
+        public IActionResult GetAllAvailabilityReservations(int idEmployee, int idService, int idUser, string dateTime)
+        {
+
+            List<ReservationDto> reservations = this._reservationService.GetAllAvailabilityReservations(idEmployee, idService, idUser, dateTime);
+            return Ok(reservations);
+        }
+
         // GET: api/ReservationApi/5
         [HttpGet("{id}", Name = "GetReservation")]
         public IActionResult GetReservation(int id)

@@ -52,6 +52,11 @@ namespace ReservationManagementApp.Controllers
         }
         public IActionResult New([Bind("Id,IdService,IdEmployee,IdUser,Date")] ReservationDto reservation)
         {
+            if (TempData["ErrorCreate"] != null)
+            {
+                ModelState.AddModelError("ErrorCreate", TempData["ErrorCreate"].ToString());
+                TempData.Clear();
+            }
             string responseBodyService = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi/" + reservation.IdService).GetAwaiter().GetResult();
             ServiceDto service = JsonConvert.DeserializeObject<ServiceDto>(responseBodyService);
             reservation.IdServiceNavigation = service;
@@ -64,19 +69,21 @@ namespace ReservationManagementApp.Controllers
             List<EmployeeDto> employeesList = JsonConvert.DeserializeObject<List<EmployeeDto>>(responseBodyEmployeesList);
             ViewData["IdEmployee"] = new SelectList(employeesList
                 .Where(elem => elem.ServicesEmployees.FirstOrDefault(elem2 => elem2.IdService == reservation.IdService) != null
-                                && elem.EmployeesShifts.FirstOrDefault(elem2 => elem2.WorkDay == reservation.Date) != null)
+                                && elem.EmployeesShifts.FirstOrDefault(elem2 => elem2.WorkDay.Date == reservation.Date.Date) != null)
                 , "Id", "Name");
 
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
             {
                 UserDto user = JsonConvert.DeserializeObject<UserDto>(HttpContext.Session.GetString("User"));
                 reservation.IdUser = user.Id;
             }
             ReservationModel reseservationModel = new ReservationModel();
             reseservationModel.Reservation = reservation;
-            reseservationModel.Reservations = Getavailability(reservation);
-            return View(reseservationModel);
 
+            string responseBodyReservationAvailabilityList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ReservationApi/Availability?idEmployee=" + reservation.IdEmployee + "&idService=" + reservation.IdService + "&idUser=" + reservation.IdUser + "&datetime=" + reservation.Date.ToString()).GetAwaiter().GetResult();
+            List<ReservationDto> reservationAvailabilityList = JsonConvert.DeserializeObject<List<ReservationDto>>(responseBodyReservationAvailabilityList);
+            reseservationModel.Reservations = reservationAvailabilityList;
+            return View(reseservationModel);
         }
 
         [HttpPost]
@@ -116,24 +123,8 @@ namespace ReservationManagementApp.Controllers
                 await this._clientService.PostResponse(this._configuration["AppSettings:ApiRest"] + "api/ReservationApi", JsonConvert.SerializeObject(reservation));
                 return RedirectToAction(nameof(Index));
             }
-            string responseBodyEmployeeList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeApi").GetAwaiter().GetResult();
-            List<EmployeeDto> employeeList = JsonConvert.DeserializeObject<List<EmployeeDto>>(responseBodyEmployeeList);
-            ViewData["IdEmployee"] = new SelectList(employeeList, "Id", "IdCard", reservation.IdEmployee);
-
-            string responseBodyServiceList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi").GetAwaiter().GetResult();
-            List<ServiceDto> servicesList = JsonConvert.DeserializeObject<List<ServiceDto>>(responseBodyServiceList);
-            ViewData["IdService"] = new SelectList(servicesList, "Id", "Name", reservation.IdService);
-
-            string responseBodyUserList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/UserApi").GetAwaiter().GetResult();
-            List<UserDto> userList = JsonConvert.DeserializeObject<List<UserDto>>(responseBodyUserList);
-            ViewData["IdUser"] = new SelectList(userList, "Id", "Email", reservation.IdUser);
-            ReservationModel reseservationModel = new ReservationModel();
-            reseservationModel.Reservation = reservation;
-
-            string responseBodyReservationList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ReservationApi").GetAwaiter().GetResult();
-            List<ReservationDto> reservationList = JsonConvert.DeserializeObject<List<ReservationDto>>(responseBodyReservationList);
-            reseservationModel.Reservations = reservationList;
-            return View(reseservationModel);
+            TempData["ErrorCreate"] = "The data is not correct.";
+            return RedirectToAction(nameof(New), reservation);
         }
 
         // GET: Reservations/Delete/5
@@ -162,52 +153,6 @@ namespace ReservationManagementApp.Controllers
         {
             await this._clientService.DeleteResponse(this._configuration["AppSettings:ApiRest"] + "api/ReservationApi/" + id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private List<ReservationDto> Getavailability(ReservationDto reservation)
-        {
-            List<ReservationDto> currentReservations = GetCurrentsReservations(reservation);
-            List<ReservationDto> possibleReservations = GetPossibleReservations(reservation);
-            possibleReservations = possibleReservations.Where(elem => currentReservations.FirstOrDefault(elem2 => elem.Date == elem2.Date) == null).ToList();
-            return possibleReservations;
-        }
-
-        private List<ReservationDto> GetCurrentsReservations(ReservationDto reservation)
-        {
-            string responseBodyReservationList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ReservationApi").GetAwaiter().GetResult();
-            List<ReservationDto> reservationList = JsonConvert.DeserializeObject<List<ReservationDto>>(responseBodyReservationList);
-
-            List<ReservationDto> currentReservations = reservationList
-               .Where(elem => elem.IdEmployee == reservation.IdEmployee &&
-               elem.Date.Date == reservation.Date.Date).ToList();
-            return currentReservations;
-        }
-
-        private List<ReservationDto> GetPossibleReservations(ReservationDto reservation)
-        {
-            List<ReservationDto> possibleReservations = new List<ReservationDto>();
-
-            string responseBodyEmployeesShiftList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeShiftApi").GetAwaiter().GetResult();
-            List<EmployeeShiftDto> employeesShiftsList = JsonConvert.DeserializeObject<List<EmployeeShiftDto>>(responseBodyEmployeesShiftList);
-            employeesShiftsList = employeesShiftsList.Where(elem => elem.IdEmployee == reservation.IdEmployee && elem.WorkDay == reservation.Date).OrderBy(elem => elem.InitHour).ToList();
-
-            foreach (EmployeeShiftDto employeeShifts in employeesShiftsList)
-                if (employeeShifts != null)
-                {
-                    for (int i = employeeShifts.InitHour; i < employeeShifts.EndHour; i++)
-                    {
-                        ReservationDto possibleReservation = new ReservationDto();
-                        possibleReservation.IdEmployee = reservation.IdEmployee;
-                        possibleReservation.IdService = reservation.IdService;
-                        possibleReservation.IdUser = reservation.IdUser;
-                        possibleReservation.IdServiceNavigation = reservation.IdServiceNavigation;
-                        possibleReservation.IdEmployeeNavigation = reservation.IdEmployeeNavigation;
-                        DateTime possibleDatetime = reservation.Date.AddHours(i);
-                        possibleReservation.Date = possibleDatetime;
-                        possibleReservations.Add(possibleReservation);
-                    }
-                }
-            return possibleReservations;
         }
 
         private bool ReservationsExists(int id)

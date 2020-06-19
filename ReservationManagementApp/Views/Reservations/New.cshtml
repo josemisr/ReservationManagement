@@ -42,6 +42,13 @@
             <div class="form-group">
                 <input type="submit" value="Search Employee" class="btn btn-primary" />
             </div>
+            <div id="messageError" class="text-danger">
+                @if (ViewData.ModelState["ErrorCreate"] != null)
+                {
+                    @Html.ValidationMessage("ErrorCreate")
+                    <br />
+                }
+            </div>
         </form>
     </div>
     <div class="col-md-9">
