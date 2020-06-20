@@ -9,11 +9,7 @@ using System.Threading.Tasks;
 using Api.IServicesApi;
 using Api.Models;
 using DataAccess.Models;
-using DataAccess.Operations;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Api.Controllers
 {
@@ -60,11 +56,10 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public List<Users> GetUsers()
+        public IActionResult GetUsers()
         {
-            List<Users> usersDb = _accountServices.GetUsers();
-            return usersDb;
+            List<UserSimpleDto> usersDb = _accountServices.GetUsers();
+            return Ok(usersDb);
         }
-
     }
 }

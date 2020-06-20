@@ -6,7 +6,6 @@ using DataAccess.Operations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Api.ServicesApi
 {
@@ -17,15 +16,16 @@ namespace Api.ServicesApi
         private EmployeeShiftOperations dbEmployeeShiftOerations = new EmployeeShiftOperations();
         private ServiceOperations dbServiceOperations = new ServiceOperations();
         private EmployeeOperations dbEmployeeOperations = new EmployeeOperations();
+
         public ReservationService(IMapper mapper)
         {
             _mapper = mapper;
         }
+
         public List<ReservationDto> GetReservations()
         {
-            List<ReservationDto> reservationsDto = new List<ReservationDto>();
             List<Reservations> reservations = db.GetAllReservations();
-            reservationsDto = _mapper.Map<List<Reservations>, List<ReservationDto>>(reservations);
+            List<ReservationDto> reservationsDto = _mapper.Map<List<Reservations>, List<ReservationDto>>(reservations);
             return reservationsDto;
         }
 
@@ -53,15 +53,13 @@ namespace Api.ServicesApi
         }
         public ReservationDto AddReservation(ReservationDto reservationDto)
         {
-            Reservations reservationDb = new Reservations();
-            reservationDb = _mapper.Map<ReservationDto, Reservations>(reservationDto);
+            Reservations reservationDb = _mapper.Map<ReservationDto, Reservations>(reservationDto);
             var result = db.CreateReservation(reservationDb);
             return _mapper.Map<Reservations, ReservationDto>(result);
         }
         public ReservationDto UpdateReservation(ReservationDto reservationDto)
         {
-            Reservations reservationDb = new Reservations();
-            reservationDb = _mapper.Map<ReservationDto, Reservations>(reservationDto);
+            Reservations reservationDb = _mapper.Map<ReservationDto, Reservations>(reservationDto);
             var result = db.UpdateReservation(reservationDb);
             return _mapper.Map<Reservations, ReservationDto>(result);
         }
@@ -70,34 +68,31 @@ namespace Api.ServicesApi
             var result = db.DeleteReservation(id);
             return _mapper.Map<Reservations, ReservationDto>(result);
         }
-
         private List<ReservationDto> GetAvailability(ReservationDto reservationDto)
         {
-            List<ReservationDto> possibleReservations = new List<ReservationDto>();
-            List<ReservationDto> currentReservations = GetCurrentsReservations(reservationDto);
-            possibleReservations = GetPossibleReservations(reservationDto);
-            if (possibleReservations != null && possibleReservations.Count > 0)
+            List<ReservationDto> possibleReservationsList = new List<ReservationDto>();
+            List<ReservationDto> currentReservationsList = GetCurrentsReservations(reservationDto);
+            possibleReservationsList = GetPossibleReservations(reservationDto);
+            if (possibleReservationsList != null && possibleReservationsList.Count > 0)
             {
-                possibleReservations = possibleReservations.Where(elem => currentReservations.FirstOrDefault(elem2 => elem.Date == elem2.Date) == null).ToList();
+                possibleReservationsList = possibleReservationsList.Where(elem => currentReservationsList.FirstOrDefault(elem2 => elem.Date == elem2.Date) == null).ToList();
             }
-            return possibleReservations;
+            return possibleReservationsList;
 
         }
-
         private List<ReservationDto> GetCurrentsReservations(ReservationDto reservation)
         {
             List<Reservations> reservationsList = db.GetAllReservations();
-            List<ReservationDto> reservationListDto = _mapper.Map<List<Reservations>, List<ReservationDto>>(reservationsList);
+            List<ReservationDto> reservationsListDto = _mapper.Map<List<Reservations>, List<ReservationDto>>(reservationsList);
 
-            List<ReservationDto> currentReservations = reservationListDto
+            List<ReservationDto> currentReservations = reservationsListDto
                .Where(elem => elem.IdEmployee == reservation.IdEmployee &&
                elem.Date.Date == reservation.Date.Date).ToList();
-            return reservationListDto;
+            return reservationsListDto;
         }
-
         private List<ReservationDto> GetPossibleReservations(ReservationDto reservation)
         {
-            List<ReservationDto> possibleReservations = new List<ReservationDto>();
+            List<ReservationDto> possibleReservationsList = new List<ReservationDto>();
             List<EmployeesShifts> employeesShiftsList = dbEmployeeShiftOerations.GetAllEmployeesShifts();
             employeesShiftsList = employeesShiftsList.Where(elem => elem.IdEmployee == reservation.IdEmployee && elem.WorkDay == reservation.Date).OrderBy(elem => elem.InitHour).ToList();
             List<EmployeeShiftDto> employeesShiftsListDto = _mapper.Map<List<EmployeesShifts>, List<EmployeeShiftDto>>(employeesShiftsList);
@@ -114,10 +109,10 @@ namespace Api.ServicesApi
                         possibleReservation.IdEmployeeNavigation = reservation.IdEmployeeNavigation;
                         DateTime possibleDatetime = reservation.Date.AddHours(i);
                         possibleReservation.Date = possibleDatetime;
-                        possibleReservations.Add(possibleReservation);
+                        possibleReservationsList.Add(possibleReservation);
                     }
                 }
-            return possibleReservations;
+            return possibleReservationsList;
         }
     }
 }

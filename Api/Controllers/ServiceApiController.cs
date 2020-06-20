@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class ServiceApiController : ControllerBase
     {
@@ -16,6 +17,7 @@ namespace Api.Controllers
         {
             this._serviceServices = serviceServices;
         }
+
         // GET: api/Service
         [HttpGet]
         public IActionResult GetServices()

@@ -10,6 +10,5 @@ namespace Api.IServicesApi
         ServiceDto AddService(ServiceDto serviceDto);
         ServiceDto UpdateService(ServiceDto serviceDto);
         ServiceDto RemoveService(int id);
-
     }
 }

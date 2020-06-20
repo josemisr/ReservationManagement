@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ReservationManagementApp.ServicesApp
@@ -14,11 +11,6 @@ namespace ReservationManagementApp.ServicesApp
     {
         static readonly HttpClient client = new HttpClient();
         private readonly HttpContextAccessor _httpContextAccessor = new HttpContextAccessor();
-        public HttpServicesReponse()
-        {
-            
-        }
-
 
         public async Task<string> GetResponse(string dir, string contentJson = "")
         {
@@ -47,7 +39,6 @@ namespace ReservationManagementApp.ServicesApp
             string responseBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             return responseBody;
         }
-
         public async Task<string> PutResponse(string dir, string contentJson = "")
         {
             var request = new HttpRequestMessage

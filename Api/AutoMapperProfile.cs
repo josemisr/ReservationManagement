@@ -1,10 +1,6 @@
 ﻿using Api.Models;
 using AutoMapper;
 using DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Api
 {
@@ -17,7 +13,9 @@ namespace Api
             CreateMap<Services, ServiceDto>();
             CreateMap<ServiceDto, Services>();
             CreateMap<Users, UserDto>();
+            CreateMap<Users, UserSimpleDto>();
             CreateMap<Employees, EmployeeDto>();
+            CreateMap<EmployeeDto, Employees>();
             CreateMap<EmployeesShifts, EmployeeShiftDto>();
             CreateMap<EmployeeShiftDto, EmployeesShifts>();
             CreateMap<EmployeesShifts, EmployeeShiftSimpleDto>();
@@ -26,6 +24,5 @@ namespace Api
             CreateMap<ServicesEmployees, ServiceEmployeeDto>();
             CreateMap<ServiceEmployeeDto, ServicesEmployees>();
         }
-    
-}
+    }
 }

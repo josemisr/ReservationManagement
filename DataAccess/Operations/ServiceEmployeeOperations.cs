@@ -1,9 +1,7 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DataAccess.Operations
 {
@@ -36,7 +34,6 @@ namespace DataAccess.Operations
             db.SaveChanges();
             return serviceEmployee;
         }
-
         public ServicesEmployees GetByPk(int id)
         {
             var serviceEmployee = db.ServicesEmployees.Find(id);

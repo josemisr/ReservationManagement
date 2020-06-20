@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DataAccess.Operations
 {
-    public  class ServiceOperations
+    public class ServiceOperations
     {
         private ReservationManagementDbContext db = new ReservationManagementDbContext();
         public List<Services> GetAllServices()

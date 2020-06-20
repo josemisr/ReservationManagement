@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Api.Models
 {
@@ -12,6 +9,5 @@ namespace Api.Models
         public int IdEmployee { get; set; }
         public int IdUser { get; set; }
         public DateTime Date { get; set; }
-
     }
 }

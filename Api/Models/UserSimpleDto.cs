@@ -2,7 +2,7 @@
 
 namespace Api.Models
 {
-    public class UserDto
+    public class UserSimpleDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -13,6 +13,5 @@ namespace Api.Models
         public DateTime Birthday { get; set; }
         public int IdRole { get; set; }
         public string Password { get; set; }
-        public  RoleDto IdRoleNavigation { get; set; }
     }
 }

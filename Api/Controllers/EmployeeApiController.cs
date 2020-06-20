@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Api.IServicesApi;
 using Api.Models;
-using DataAccess.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EmployeeApiController : ControllerBase
     {
         IEmployeeService _employeeService;
@@ -20,6 +16,7 @@ namespace Api.Controllers
         {
             this._employeeService = employeeService;
         }
+
         // GET: api/EmployeeApi
         [HttpGet]
         public IActionResult Get()

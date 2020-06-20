@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Api.IServicesApi;
 using Api.Models;
-using DataAccess.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -21,6 +16,7 @@ namespace Api.Controllers
         {
             this._reservationService = reservationService;
         }
+
         // GET: api/ReservationApi
         [HttpGet]
         public IActionResult GetReservations()
@@ -33,7 +29,6 @@ namespace Api.Controllers
         [HttpGet, Route("Availability")]
         public IActionResult GetAllAvailabilityReservations(int idEmployee, int idService, int idUser, string dateTime)
         {
-
             List<ReservationDto> reservations = this._reservationService.GetAllAvailabilityReservations(idEmployee, idService, idUser, dateTime);
             return Ok(reservations);
         }

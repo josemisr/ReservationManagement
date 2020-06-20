@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class ServiceEmployeeApiController : ControllerBase
     {
@@ -19,8 +20,8 @@ namespace Api.Controllers
         [HttpGet]
         public IActionResult GetServicesEmployees()
         {
-            List<ServiceEmployeeDto> reservations = this._serviceEmployeeService.GetServicesEmployees();
-            return Ok(reservations);
+            List<ServiceEmployeeDto> servicesEmployees = this._serviceEmployeeService.GetServicesEmployees();
+            return Ok(servicesEmployees);
         }
 
         // GET: api/ServiceEmployeeApiController/5

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Api.IServicesApi;
 using Api.Models;
-using DataAccess.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class EmployeeShiftApiController : ControllerBase
     {
@@ -20,6 +16,7 @@ namespace Api.Controllers
         {
             this._employeeShiftService = employeeShiftService;
         }
+
         // GET: api/EmployeeShift
         [HttpGet]
         public IActionResult Get()

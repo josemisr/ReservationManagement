@@ -2,25 +2,16 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using ReservationManagementApp.Models;
+using Newtonsoft.Json;
 using ReservationManagementApp.Models.Dto;
 using ReservationManagementApp.Models.JWT;
 using ReservationManagementApp.ServicesApp;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Web;
-//using Microsoft.AspNet.Identity;
-//using Microsoft.AspNet.Identity.Owin;
-//using Microsoft.Owin.Security;
-
 
 namespace ReservationManagementApp.Controllers
 {
@@ -28,7 +19,7 @@ namespace ReservationManagementApp.Controllers
     public class AccountController : Controller
     {
         private readonly IConfiguration _configuration;
-     
+
         public HttpServicesReponse _clientService = new HttpServicesReponse();
         public AccountController(IConfiguration configuration)
         {
@@ -52,7 +43,7 @@ namespace ReservationManagementApp.Controllers
         public ActionResult Login(String email, string password, string returnUrl)
         {
             string content = "{\"email\":\"" + email + "\",\"password\":\"" + password + "\"}";
-            string responseBody = _clientService.PostResponse(this._configuration["AppSettings:ApiRest"] + "api/AccountApi", content).GetAwaiter().GetResult();
+            string responseBody = this._clientService.PostResponse(this._configuration["AppSettings:ApiRest"] + "api/AccountApi", content).GetAwaiter().GetResult();
             JwtSecurityTokenHandler hand = new JwtSecurityTokenHandler();
             if (!string.IsNullOrEmpty(responseBody))
             {
@@ -61,17 +52,17 @@ namespace ReservationManagementApp.Controllers
                 {
                     if (string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
                     {
-                        UserJWT userJWT = JsonSerializer.Deserialize<UserJWT>(tokenS.Payload["UserJwt"].ToString());
-                        UserDto userDb = new UserDto();
-                        userDb.Email = userJWT.Email;
-                        userDb.IdRole = userJWT.IdRole;
-                        userDb.Name = userJWT.Name;
-                        userDb.Surname = userJWT.Surname;
-                        userDb.Surname2 = userJWT.Surname2;
-                        userDb.Id = userJWT.Id;
-                        HttpContext.Session.SetString("User", JsonSerializer.Serialize(userDb));
-                        HttpContext.Session.SetString("Jwt", JsonSerializer.Serialize(responseBody));
-                        HttpContext.Session.SetString("UserName", userDb.Name);
+                        UserJWT userJWT = JsonConvert.DeserializeObject<UserJWT>(tokenS.Payload["UserJwt"].ToString());
+                        UserDto userDto = new UserDto();
+                        userDto.Email = userJWT.Email;
+                        userDto.IdRole = userJWT.IdRole;
+                        userDto.Name = userJWT.Name;
+                        userDto.Surname = userJWT.Surname;
+                        userDto.Surname2 = userJWT.Surname2;
+                        userDto.Id = userJWT.Id;
+                        HttpContext.Session.SetString("User", JsonConvert.SerializeObject(userDto));
+                        HttpContext.Session.SetString("Jwt", JsonConvert.SerializeObject(responseBody));
+                        HttpContext.Session.SetString("UserName", userDto.Name);
                     }
                     return RedirectToAction("Index", "Home");
                 }
@@ -99,14 +90,14 @@ namespace ReservationManagementApp.Controllers
             if (ModelState.IsValid)
             {
                 user.IdRole = 2;
-                string responseBody = await _clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/AccountApi");
-                List<UserDto> list = JsonSerializer.Deserialize<List<UserDto>>(responseBody);
+                string responseBody = await this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/AccountApi");
+                List<UserDto> list = JsonConvert.DeserializeObject<List<UserDto>>(responseBody);
                 if (list.FirstOrDefault(elem => elem.Email == user.Email) != null)
                 {
                     ModelState.AddModelError("ErrorEmail", "The Email already exists");
                     return View(user);
                 }
-                string responseBody2 = await _clientService.PostResponse(this._configuration["AppSettings:ApiRest"] + "api/AccountApi/Register", JsonSerializer.Serialize(user));
+                string responseBody2 = await this._clientService.PostResponse(this._configuration["AppSettings:ApiRest"] + "api/AccountApi/Register", JsonConvert.SerializeObject(user));
                 JwtSecurityTokenHandler hand = new JwtSecurityTokenHandler();
                 if (!string.IsNullOrEmpty(responseBody2))
                 {
@@ -115,8 +106,16 @@ namespace ReservationManagementApp.Controllers
                     {
                         if (string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
                         {
-                            HttpContext.Session.SetString("User", JsonSerializer.Serialize(user));
-                            HttpContext.Session.SetString("Jwt", JsonSerializer.Serialize(responseBody2));
+                            UserJWT userJWT = JsonConvert.DeserializeObject<UserJWT>(tokenS.Payload["UserJwt"].ToString());
+                            UserDto userDto = new UserDto();
+                            userDto.Email = userJWT.Email;
+                            userDto.IdRole = userJWT.IdRole;
+                            userDto.Name = userJWT.Name;
+                            userDto.Surname = userJWT.Surname;
+                            userDto.Surname2 = userJWT.Surname2;
+                            userDto.Id = userJWT.Id;
+                            HttpContext.Session.SetString("User", JsonConvert.SerializeObject(userDto));
+                            HttpContext.Session.SetString("Jwt", JsonConvert.SerializeObject(responseBody2));
                             HttpContext.Session.SetString("UserName", user.Name);
                         }
                         return RedirectToAction("Index", "Home");

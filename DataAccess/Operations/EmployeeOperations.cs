@@ -1,9 +1,7 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DataAccess.Operations
 {
@@ -26,7 +24,7 @@ namespace DataAccess.Operations
         {
             var employee = GetByPk(id);
             var servicesEmployeesList = db.ServicesEmployees.Where(elem => elem.IdEmployee == id);
-            var employeesShiftsList = db.EmployeesShifts.Where(elem=> elem.IdEmployee ==id);
+            var employeesShiftsList = db.EmployeesShifts.Where(elem => elem.IdEmployee == id);
             var reservationsList = db.Reservations.Where(elem => elem.IdEmployee == id);
             foreach (var employeeShift in employeesShiftsList)
             {

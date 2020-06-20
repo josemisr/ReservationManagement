@@ -6,7 +6,6 @@ using ReservationManagementApp.Controllers;
 
 namespace SolucionMonolitica.Filters
 {
-
     public class VerifySession : ActionFilterAttribute
     {
         private readonly IHttpContextAccessor _httpContextAccessor;

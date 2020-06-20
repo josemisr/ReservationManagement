@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ReservationManagementApp.Models.Dto
 {
@@ -14,7 +12,9 @@ namespace ReservationManagementApp.Models.Dto
         }
 
         public int Id { get; set; }
+        [Required(ErrorMessage = "Name Required")]
         public string Name { get; set; }
+        [Required(ErrorMessage = "Price Required")]
         public int Price { get; set; }
         public string Image { get; set; }
         public string Description { get; set; }

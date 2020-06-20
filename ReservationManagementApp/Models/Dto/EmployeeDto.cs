@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ReservationManagementApp.Models.Dto
 {
@@ -15,9 +13,11 @@ namespace ReservationManagementApp.Models.Dto
         }
 
         public int Id { get; set; }
+        [Required(ErrorMessage = "Name Required")]
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Surname2 { get; set; }
+        [Required(ErrorMessage = "IdCard Required")]
         public string IdCard { get; set; }
 
         public virtual ICollection<EmployeeShiftDto> EmployeesShifts { get; set; }

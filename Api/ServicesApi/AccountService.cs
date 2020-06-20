@@ -1,5 +1,6 @@
 ﻿using Api.IServicesApi;
 using Api.Models;
+using AutoMapper;
 using DataAccess.Models;
 using DataAccess.Operations;
 using Microsoft.Extensions.Configuration;
@@ -7,22 +8,21 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Api.ServicesApi
 {
-    public class AccountService:IAccountService
+    public class AccountService : IAccountService
     {
         private readonly IConfiguration configuration;
         private UserOperations db = new UserOperations();
-
-        public AccountService(IConfiguration configuration)
+        private readonly IMapper _mapper;
+        public AccountService(IConfiguration configuration, IMapper mapper)
         {
             this.configuration = configuration;
+            this._mapper = mapper;
         }
         public string Login(UserLogin userLogin)
         {
@@ -31,7 +31,6 @@ namespace Api.ServicesApi
             {
                 UserJWT user = new UserJWT()
                 {
-                    // Id del Usuario en el Sistema de Información (BD)
                     Id = userDb.Id,
                     Name = userDb.Name,
                     Surname = userDb.Surname,
@@ -47,7 +46,6 @@ namespace Api.ServicesApi
                 return string.Empty;
             }
         }
-
         public string Register(Users user)
         {
             user.IdRole = 2;
@@ -56,7 +54,6 @@ namespace Api.ServicesApi
             {
                 UserJWT userJwt = new UserJWT()
                 {
-                    // Id del Usuario en el Sistema de Información (BD)
                     Id = userDb.Id,
                     Name = userDb.Name,
                     Surname = userDb.Surname,
@@ -72,10 +69,10 @@ namespace Api.ServicesApi
                 return String.Empty;
             }
         }
-
-        public List<Users> GetUsers()
+        public List<UserSimpleDto> GetUsers()
         {
-            return db.GetAllUsers();
+            var result = db.GetAllUsers();
+            return _mapper.Map<List<Users>, List<UserSimpleDto>>(result);
         }
         private string GenerarTokenJWT(UserJWT userJwt)
         {

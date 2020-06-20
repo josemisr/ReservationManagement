@@ -10,6 +10,5 @@ namespace Api.IServicesApi
         ServiceEmployeeDto AddServiceEmployee(ServiceEmployeeDto serviceDto);
         ServiceEmployeeDto UpdateServiceEmployee(ServiceEmployeeDto serviceDto);
         ServiceEmployeeDto RemoveServiceEmployee(int id);
-
     }
 }

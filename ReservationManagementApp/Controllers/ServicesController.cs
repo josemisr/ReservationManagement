@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ReservationManagementApp.Enum;
-using ReservationManagementApp.Authorize;
-using ReservationManagementApp.Models;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using ReservationManagementApp.ServicesApp;
-using System.Text.Json;
 using Newtonsoft.Json;
 using ReservationManagementApp.Models.Dto;
 
@@ -32,7 +25,7 @@ namespace ReservationManagementApp.Controllers
         // GET: Services
         public IActionResult Index()
         {
-            string responseBody =  this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi").GetAwaiter().GetResult();
+            string responseBody = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi").GetAwaiter().GetResult();
             List<ServiceDto> list = JsonConvert.DeserializeObject<List<ServiceDto>>(responseBody);
             return View(list);
         }
@@ -81,8 +74,8 @@ namespace ReservationManagementApp.Controllers
                     }
                 }
                 string responseBody = this._clientService.PostResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi", JsonConvert.SerializeObject(service)).GetAwaiter().GetResult();
-                if(!string.IsNullOrEmpty(responseBody))
-                return RedirectToAction(nameof(Index));
+                if (!string.IsNullOrEmpty(responseBody))
+                    return RedirectToAction(nameof(Index));
             }
             return View(service);
         }
@@ -139,7 +132,7 @@ namespace ReservationManagementApp.Controllers
                         TempData.Remove("Image");
                     }
                     string responseBody = this._clientService.PutResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceApi/" + id, JsonConvert.SerializeObject(service)).GetAwaiter().GetResult();
-                  
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {

@@ -1,11 +1,8 @@
-﻿
-namespace Api.Models
+﻿namespace Api.Models
 {
     public class ServiceEmployeeSimpleDto
-    {
-        public int Id { get; set; }
+    {        public int Id { get; set; }
         public int IdService { get; set; }
         public int IdEmployee { get; set; }
-
-    }
+            }
 }
