@@ -99,6 +99,8 @@ namespace DataAccess.Models
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(30);
+
+                entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
             });
 
             modelBuilder.Entity<ServicesEmployees>(entity =>
