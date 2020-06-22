@@ -1,16 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
-using Api.IServicesApi;
-using Api.ServicesApi;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using ServiceServiceApi.IServicesApi;
+using ServiceServiceApi.ServicesApi;
 
-namespace Api
+namespace ServiceServiceApi
 {
     public class Startup
     {
@@ -25,26 +32,23 @@ namespace Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer("TestKey", options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidateIssuer = true,
-                    ValidateLifetime = true,
-                    ValidateAudience = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["JWT:Issuer"],
-                    ValidAudience = Configuration["JWT:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        System.Text.Encoding.UTF8.GetBytes(Configuration["JWT:SecretKey"])
-                    )
-                };
-            });
+       .AddJwtBearer("TestKey", options =>
+       {
+           options.TokenValidationParameters = new TokenValidationParameters()
+           {
+               ValidateIssuer = true,
+               ValidateLifetime = true,
+               ValidateAudience = true,
+               ValidateIssuerSigningKey = true,
+               ValidIssuer = Configuration["JWT:Issuer"],
+               ValidAudience = Configuration["JWT:Audience"],
+               IssuerSigningKey = new SymmetricSecurityKey(
+                   System.Text.Encoding.UTF8.GetBytes(Configuration["JWT:SecretKey"])
+               )
+           };
+       });
             services.AddAutoMapper(new Assembly[] { typeof(AutoMapperProfile).Assembly });
-            services.AddTransient(typeof(IReservationService), typeof(ReservationService));
-            services.AddTransient(typeof(IEmployeeService), typeof(EmployeeService));
-            services.AddTransient(typeof(IEmployeeShiftService), typeof(EmployeeShiftService));
-            services.AddTransient(typeof(IServiceEmployeeService), typeof(ServiceEmployeeService));
+            services.AddTransient(typeof(IServiceService), typeof(ServiceService));
             services.AddControllers();
         }
 
@@ -59,7 +63,6 @@ namespace Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseAuthentication();
 
             app.UseAuthorization();
 

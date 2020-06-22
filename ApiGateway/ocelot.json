@@ -1,12 +1,12 @@
 {
   "ReRoutes": [
     {
-      "DownstreamPathTemplate": "/api/ServiceApi",
+      "DownstreamPathTemplate": "/ServiceServiceApi",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44310
+          "Port": 44303
         }
       ],
       "UpstreamPathTemplate": "/api/ServiceApi",
@@ -87,12 +87,12 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/ServiceApi/{everything}",
+      "DownstreamPathTemplate": "/ServiceServiceApi/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44310
+          "Port": 44303
         }
       ],
       "UpstreamPathTemplate": "/api/ServiceApi/{everything}",

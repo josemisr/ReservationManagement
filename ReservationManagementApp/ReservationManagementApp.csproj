@@ -24,12 +24,6 @@
 
 
   <ItemGroup>
-    <None Include="wwwroot\Resources\Images\Captura.PNG" />
-    <None Include="wwwroot\Resources\Images\_DSC0291.JPG" />
-  </ItemGroup>
-
-
-  <ItemGroup>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
   </ItemGroup>
 

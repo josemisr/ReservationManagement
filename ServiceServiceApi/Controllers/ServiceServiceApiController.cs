@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
-using Api.IServicesApi;
-using Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ServiceServiceApi.IServicesApi;
+using ServiceServiceApi.Models;
 
-namespace Api.Controllers
+namespace ServiceServiceApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [Authorize(AuthenticationSchemes = "TestKey")]
     [ApiController]
-    public class ServiceApiController : ControllerBase
+    public class ServiceServiceApiController : ControllerBase
     {
 
         IServiceService _serviceServices;
-        public ServiceApiController(IServiceService serviceServices)
+        public ServiceServiceApiController(IServiceService serviceServices)
         {
             this._serviceServices = serviceServices;
         }

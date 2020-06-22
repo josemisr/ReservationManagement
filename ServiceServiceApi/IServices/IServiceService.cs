@@ -1,7 +1,7 @@
-﻿using Api.Models;
+﻿using ServiceServiceApi.Models;
 using System.Collections.Generic;
 
-namespace Api.IServicesApi
+namespace ServiceServiceApi.IServicesApi
 {
     public interface IServiceService
     {
