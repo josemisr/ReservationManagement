@@ -1,13 +1,13 @@
-﻿using Api.IServicesApi;
-using Api.Models;
-using AutoMapper;
+﻿using AutoMapper;
 using DataAccess.Models;
 using DataAccess.Operations;
+using ReservationServiceApi.IServicesApi;
+using ReservationServiceApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Api.ServicesApi
+namespace ReservationServiceApi.ServicesApi
 {
     public class ReservationService : IReservationService
     {

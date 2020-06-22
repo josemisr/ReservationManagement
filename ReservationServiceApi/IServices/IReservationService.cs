@@ -1,7 +1,7 @@
-﻿using Api.Models;
+﻿using ReservationServiceApi.Models;
 using System.Collections.Generic;
 
-namespace Api.IServicesApi
+namespace ReservationServiceApi.IServicesApi
 {
     public interface IReservationService
     {

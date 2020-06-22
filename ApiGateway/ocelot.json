@@ -1,7 +1,7 @@
 {
   "ReRoutes": [
     {
-      "DownstreamPathTemplate": "/ServiceServiceApi",
+      "DownstreamPathTemplate": "/ServiceService",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -17,12 +17,12 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/ReservationApi",
+      "DownstreamPathTemplate": "/ReservationService",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44310
+          "Port": 44308
         }
       ],
       "UpstreamPathTemplate": "/api/ReservationApi",
@@ -87,7 +87,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/ServiceServiceApi/{everything}",
+      "DownstreamPathTemplate": "/ServiceService/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -103,12 +103,12 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/ReservationApi/{everything}",
+      "DownstreamPathTemplate": "/ReservationService/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44310
+          "Port": 44308
         }
       ],
       "UpstreamPathTemplate": "/api/ReservationApi/{everything}",

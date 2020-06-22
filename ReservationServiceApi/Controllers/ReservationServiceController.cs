@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
-using Api.IServicesApi;
-using Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ReservationServiceApi.IServicesApi;
+using ReservationServiceApi.Models;
 
-namespace Api.Controllers
+namespace ReservationServiceApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [Authorize(AuthenticationSchemes = "TestKey")]
     [ApiController]
-    public class ReservationApiController : ControllerBase
+    public class ReservationServiceController : ControllerBase
     {
         IReservationService _reservationService;
-        public ReservationApiController(IReservationService reservationService)
+        public ReservationServiceController(IReservationService reservationService)
         {
             this._reservationService = reservationService;
         }

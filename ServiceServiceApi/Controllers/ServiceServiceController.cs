@@ -9,11 +9,11 @@ namespace ServiceServiceApi.Controllers
     [Route("[controller]")]
     [Authorize(AuthenticationSchemes = "TestKey")]
     [ApiController]
-    public class ServiceServiceApiController : ControllerBase
+    public class ServiceServiceController : ControllerBase
     {
 
         IServiceService _serviceServices;
-        public ServiceServiceApiController(IServiceService serviceServices)
+        public ServiceServiceController(IServiceService serviceServices)
         {
             this._serviceServices = serviceServices;
         }
