@@ -34,7 +34,7 @@
     },
 
     {
-      "DownstreamPathTemplate": "/api/EmployeeApi",
+      "DownstreamPathTemplate": "/EmployeeService",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -52,7 +52,7 @@
 
 
     {
-      "DownstreamPathTemplate": "/api/EmployeeShiftApi",
+      "DownstreamPathTemplate": "/EmployeeShiftService",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -71,7 +71,7 @@
 
 
     {
-      "DownstreamPathTemplate": "/api/ServiceEmployeeApi",
+      "DownstreamPathTemplate": "/ServiceEmployeeService",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -120,7 +120,7 @@
     },
 
     {
-      "DownstreamPathTemplate": "/api/EmployeeApi/{everything}",
+      "DownstreamPathTemplate": "/EmployeeService/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -138,7 +138,7 @@
 
 
     {
-      "DownstreamPathTemplate": "/api/EmployeeShiftApi/{everything}",
+      "DownstreamPathTemplate": "/EmployeeShiftService/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -157,7 +157,7 @@
 
 
     {
-      "DownstreamPathTemplate": "/api/ServiceEmployeeApi/{everything}",
+      "DownstreamPathTemplate": "/ServiceEmployeeService/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {

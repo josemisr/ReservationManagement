@@ -1,7 +1,8 @@
 using System.Reflection;
-using Api.IServicesApi;
-using Api.ServicesApi;
 using AutoMapper;
+using EmployeeServiceApi;
+using EmployeeServiceApi.IServicesApi;
+using EmployeeServiceApi.ServicesApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

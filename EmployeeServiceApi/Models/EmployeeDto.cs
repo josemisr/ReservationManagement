@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Api.Models
+namespace EmployeeServiceApi.Models
 {
     public class EmployeeDto
     {

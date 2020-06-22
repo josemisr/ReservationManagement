@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Api.Models
+namespace EmployeeServiceApi.Models
 {
-    public class UserJWT
+    public class UserSimpleDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -15,7 +12,6 @@ namespace Api.Models
         public string Email { get; set; }
         public DateTime Birthday { get; set; }
         public int IdRole { get; set; }
-        public string Rol { get; set; }
         public string Password { get; set; }
     }
 }

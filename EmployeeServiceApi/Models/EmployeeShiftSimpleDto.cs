@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace Api.Models
+namespace EmployeeServiceApi.Models
 {
-    public class EmployeeShiftDto
+    public class EmployeeShiftSimpleDto
     {
         public int Id { get; set; }
         public int IdEmployee { get; set; }
         public DateTime WorkDay { get; set; }
         public int InitHour { get; set; }
-        public int EndHour { get; set; }    
+        public int EndHour { get; set; }
     }
 }

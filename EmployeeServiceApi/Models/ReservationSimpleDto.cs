@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Api.Models
+namespace EmployeeServiceApi.Models
 {
     public class ReservationSimpleDto
     {

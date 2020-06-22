@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
-using Api.IServicesApi;
-using Api.Models;
+using EmployeeServiceApi.IServicesApi;
+using EmployeeServiceApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Controllers
+namespace EmployeeServiceApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = "TestKey")]
-    public class EmployeeApiController : ControllerBase
+    public class EmployeeServiceController : ControllerBase
     {
         IEmployeeService _employeeService;
-        public EmployeeApiController(IEmployeeService employeeService)
+        public EmployeeServiceController(IEmployeeService employeeService)
         {
             this._employeeService = employeeService;
         }

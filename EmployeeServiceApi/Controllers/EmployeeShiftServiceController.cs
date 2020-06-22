@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
-using Api.IServicesApi;
-using Api.Models;
+using EmployeeServiceApi.IServicesApi;
+using EmployeeServiceApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Controllers
+namespace EmployeeServiceApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [Authorize(AuthenticationSchemes = "TestKey")]
     [ApiController]
-    public class EmployeeShiftApiController : ControllerBase
+    public class EmployeeShiftServiceController : ControllerBase
     {
         IEmployeeShiftService _employeeShiftService;
-        public EmployeeShiftApiController(IEmployeeShiftService employeeShiftService)
+        public EmployeeShiftServiceController(IEmployeeShiftService employeeShiftService)
         {
             this._employeeShiftService = employeeShiftService;
         }

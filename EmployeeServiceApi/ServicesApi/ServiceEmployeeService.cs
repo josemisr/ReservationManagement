@@ -1,11 +1,11 @@
-﻿using Api.IServicesApi;
-using Api.Models;
-using AutoMapper;
+﻿using AutoMapper;
 using DataAccess.Models;
 using DataAccess.Operations;
+using EmployeeServiceApi.IServicesApi;
+using EmployeeServiceApi.Models;
 using System.Collections.Generic;
 
-namespace Api.ServicesApi
+namespace EmployeeServiceApi.ServicesApi
 {
     public class ServiceEmployeeService : IServiceEmployeeService
     {

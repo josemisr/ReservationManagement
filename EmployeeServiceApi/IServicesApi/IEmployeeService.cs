@@ -1,7 +1,7 @@
-﻿using Api.Models;
+﻿using EmployeeServiceApi.Models;
 using System.Collections.Generic;
 
-namespace Api.IServicesApi
+namespace EmployeeServiceApi.IServicesApi
 {
     public interface IEmployeeService
     {
