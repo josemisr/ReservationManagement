@@ -88,7 +88,7 @@ namespace Api.ServicesApi
             List<ReservationDto> currentReservations = reservationsListDto
                .Where(elem => elem.IdEmployee == reservation.IdEmployee &&
                elem.Date.Date == reservation.Date.Date).ToList();
-            return reservationsListDto;
+            return currentReservations;
         }
         private List<ReservationDto> GetPossibleReservations(ReservationDto reservation)
         {
