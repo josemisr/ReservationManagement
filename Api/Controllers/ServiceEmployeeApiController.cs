@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "TestKey")]
     [ApiController]
     public class ServiceEmployeeApiController : ControllerBase
     {

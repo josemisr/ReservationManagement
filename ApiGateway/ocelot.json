@@ -1,0 +1,192 @@
+{
+  "ReRoutes": [
+    {
+      "DownstreamPathTemplate": "/api/ServiceApi",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44310
+        }
+      ],
+      "UpstreamPathTemplate": "/api/ServiceApi",
+      "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/ReservationApi",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44310
+        }
+      ],
+      "UpstreamPathTemplate": "/api/ReservationApi",
+      "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/EmployeeApi",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44310
+        }
+      ],
+      "UpstreamPathTemplate": "/api/EmployeeApi",
+      "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
+    },
+
+
+    {
+      "DownstreamPathTemplate": "/api/EmployeeShiftApi",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44310
+        }
+      ],
+      "UpstreamPathTemplate": "/api/EmployeeShiftApi",
+      "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
+    },
+
+
+
+    {
+      "DownstreamPathTemplate": "/api/ServiceEmployeeApi",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44310
+        }
+      ],
+      "UpstreamPathTemplate": "/api/ServiceEmployeeApi",
+      "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/ServiceApi/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44310
+        }
+      ],
+      "UpstreamPathTemplate": "/api/ServiceApi/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/ReservationApi/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44310
+        }
+      ],
+      "UpstreamPathTemplate": "/api/ReservationApi/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/EmployeeApi/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44310
+        }
+      ],
+      "UpstreamPathTemplate": "/api/EmployeeApi/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
+    },
+
+
+    {
+      "DownstreamPathTemplate": "/api/EmployeeShiftApi/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44310
+        }
+      ],
+      "UpstreamPathTemplate": "/api/EmployeeShiftApi/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
+    },
+
+
+
+    {
+      "DownstreamPathTemplate": "/api/ServiceEmployeeApi/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44310
+        }
+      ],
+      "UpstreamPathTemplate": "/api/ServiceEmployeeApi/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/AccountApi",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44310
+        }
+      ],
+      "UpstreamPathTemplate": "/api/AccountApi",
+      "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ]
+    }
+
+  ],
+  "GlobalConfiguration": {
+
+  }
+}

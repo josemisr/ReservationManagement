@@ -25,7 +25,7 @@ namespace Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
+            .AddJwtBearer("TestKey", options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {

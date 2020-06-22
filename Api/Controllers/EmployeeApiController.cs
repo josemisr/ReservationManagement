@@ -8,7 +8,7 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "TestKey")]
     public class EmployeeApiController : ControllerBase
     {
         IEmployeeService _employeeService;
