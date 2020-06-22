@@ -1,5 +1,5 @@
-﻿using Api.IServicesApi;
-using Api.Models;
+﻿using AccountServiceApi.IServicesApi;
+using AccountServiceApi.Models;
 using AutoMapper;
 using DataAccess.Models;
 using DataAccess.Operations;
@@ -12,7 +12,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 
-namespace Api.ServicesApi
+namespace AccountServiceApi.ServicesApi
 {
     public class AccountService : IAccountService
     {

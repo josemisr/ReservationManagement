@@ -1,8 +1,8 @@
-﻿using Api.Models;
+﻿using AccountServiceApi.Models;
 using DataAccess.Models;
 using System.Collections.Generic;
 
-namespace Api.IServicesApi
+namespace AccountServiceApi.IServicesApi
 {
     public interface IAccountService
     {

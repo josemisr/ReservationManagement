@@ -1,6 +1,7 @@
+
 using System.Reflection;
-using Api.IServicesApi;
-using Api.ServicesApi;
+using AccountServiceApi.IServicesApi;
+using AccountServiceApi.ServicesApi;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -10,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Api
+namespace AccountServiceApi
 {
     public class Startup
     {
@@ -25,10 +26,10 @@ namespace Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer("TestKey", options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters()
+                .AddJwtBearer("TestKey", options =>
                 {
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
                     ValidateIssuer = true,
                     ValidateLifetime = true,
                     ValidateAudience = true,
@@ -36,16 +37,12 @@ namespace Api
                     ValidIssuer = Configuration["JWT:Issuer"],
                     ValidAudience = Configuration["JWT:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        System.Text.Encoding.UTF8.GetBytes(Configuration["JWT:SecretKey"])
+                   System.Text.Encoding.UTF8.GetBytes(Configuration["JWT:SecretKey"])
                     )
                 };
             });
             services.AddAutoMapper(new Assembly[] { typeof(AutoMapperProfile).Assembly });
-            services.AddTransient(typeof(IServiceService), typeof(ServiceService));
-            services.AddTransient(typeof(IReservationService), typeof(ReservationService));
-            services.AddTransient(typeof(IEmployeeService), typeof(EmployeeService));
-            services.AddTransient(typeof(IEmployeeShiftService), typeof(EmployeeShiftService));
-            services.AddTransient(typeof(IServiceEmployeeService), typeof(ServiceEmployeeService));
+            services.AddTransient(typeof(IAccountService), typeof(AccountService));
             services.AddControllers();
         }
 
@@ -60,7 +57,6 @@ namespace Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseAuthentication();
 
             app.UseAuthorization();
 

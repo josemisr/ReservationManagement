@@ -60,8 +60,8 @@ namespace ReservationManagementApp
 
             if (env.IsDevelopment())
             {
-                //app.UseDeveloperExceptionPage();
-                app.UseExceptionHandler("/Global/Error");
+                app.UseDeveloperExceptionPage();
+                //app.UseExceptionHandler("/Global/Error");
                 app.UseDatabaseErrorPage();
             }
             else

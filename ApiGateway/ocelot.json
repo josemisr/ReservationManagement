@@ -173,15 +173,28 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/AccountApi",
+      "DownstreamPathTemplate": "/AccountService",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44310
+          "Port": 44311
         }
       ],
       "UpstreamPathTemplate": "/api/AccountApi",
+      "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/AccountService/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44311
+        }
+      ],
+      "UpstreamPathTemplate": "/api/AccountApi/{everything}",
       "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ]
     }
 

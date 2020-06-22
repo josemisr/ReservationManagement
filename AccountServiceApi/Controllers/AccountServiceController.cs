@@ -1,25 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Api.IServicesApi;
-using Api.Models;
+using AccountServiceApi.IServicesApi;
+using AccountServiceApi.Models;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Controllers
+namespace AccountServiceApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
-    public class AccountApiController : ControllerBase
+    public class AccountServiceController : ControllerBase
     {
         IAccountService _accountServices;
 
-        public AccountApiController(IAccountService accountService)
+        public AccountServiceController(IAccountService accountService)
         {
             this._accountServices = accountService;
         }
