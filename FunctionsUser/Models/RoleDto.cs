@@ -1,4 +1,4 @@
-﻿namespace AccountServiceApi.Models
+﻿namespace FunctionsUser.Models
 {
     public class RoleDto
     {

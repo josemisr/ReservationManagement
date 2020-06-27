@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AccountServiceApi.Models
+namespace FunctionsUser.Models
 {
     public class UserSimpleDto
     {

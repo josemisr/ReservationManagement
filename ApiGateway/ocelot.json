@@ -173,12 +173,20 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/AccountService",
-      "DownstreamScheme": "https",
+      //"DownstreamPathTemplate": "/AccountService",
+      //"DownstreamScheme": "https",
+      //"DownstreamHostAndPorts": [
+      //  {
+      //    "Host": "localhost",
+      //    "Port": 44311
+      //  }
+      //],
+      "DownstreamPathTemplate": "/api/AccountFunctionApi",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44311
+          "Port": 7074
         }
       ],
       "UpstreamPathTemplate": "/api/AccountApi",
@@ -186,12 +194,20 @@
     },
 
     {
-      "DownstreamPathTemplate": "/AccountService/{everything}",
-      "DownstreamScheme": "https",
+      //"DownstreamPathTemplate": "/AccountService/{everything}",
+      //"DownstreamScheme": "https",
+      //"DownstreamHostAndPorts": [
+      //  {
+      //    "Host": "localhost",
+      //    "Port": 44311
+      //  }
+      //],
+      "DownstreamPathTemplate": "/api/AccountFunctionApi/{everything}",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44311
+          "Port": 7074
         }
       ],
       "UpstreamPathTemplate": "/api/AccountApi/{everything}",

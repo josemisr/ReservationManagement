@@ -42,7 +42,7 @@ namespace ReservationManagementApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(String email, string password, string returnUrl)
         {
-            string content = "{\"email\":\"" + email + "\",\"password\":\"" + password + "\"}";
+            string content = "{\"Email\":\"" + email + "\",\"Password\":\"" + password + "\"}";
             string responseBody = this._clientService.PostResponse(this._configuration["AppSettings:ApiRest"] + "api/AccountApi", content).GetAwaiter().GetResult();
             JwtSecurityTokenHandler hand = new JwtSecurityTokenHandler();
             if (!string.IsNullOrEmpty(responseBody))
