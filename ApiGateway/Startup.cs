@@ -68,7 +68,7 @@ namespace Prueba
             //app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context => { await context.Response.WriteAsync("Hola"); });
+                endpoints.MapGet("/", async context => { await context.Response.WriteAsync("Run"); });
             });
             app.UseOcelot().Wait();
         }
