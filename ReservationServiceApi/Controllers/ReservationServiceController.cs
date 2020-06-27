@@ -7,7 +7,7 @@ using ReservationServiceApi.Models;
 namespace ReservationServiceApi.Controllers
 {
     [Route("[controller]")]
-    [Authorize(AuthenticationSchemes = "TestKey")]
+    [Authorize(AuthenticationSchemes = "Key")]
     [ApiController]
     public class ReservationServiceController : ControllerBase
     {

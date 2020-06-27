@@ -32,7 +32,7 @@ namespace ServiceServiceApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-       .AddJwtBearer("TestKey", options =>
+       .AddJwtBearer("Key", options =>
        {
            options.TokenValidationParameters = new TokenValidationParameters()
            {

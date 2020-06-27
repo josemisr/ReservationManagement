@@ -14,7 +14,8 @@ namespace ReservationManagementApp.ServicesApp
 
         public async Task<string> GetResponse(string dir, string contentJson = "")
         {
-            if (!String.IsNullOrEmpty(_httpContextAccessor.HttpContext.Session.GetString("Jwt"))) {
+            if (!String.IsNullOrEmpty(_httpContextAccessor.HttpContext.Session.GetString("Jwt")))
+            {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _httpContextAccessor.HttpContext.Session.GetString("Jwt").Trim('"'));
             }
             HttpResponseMessage response = await client.GetAsync(dir);
@@ -64,7 +65,7 @@ namespace ReservationManagementApp.ServicesApp
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _httpContextAccessor.HttpContext.Session.GetString("Jwt").Trim('"'));
             }
             response.EnsureSuccessStatusCode();
-            string responseBody = await response.Content.ReadAsStringAsync() ;
+            string responseBody = await response.Content.ReadAsStringAsync();
             return responseBody;
         }
     }

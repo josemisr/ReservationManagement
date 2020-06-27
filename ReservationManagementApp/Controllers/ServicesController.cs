@@ -126,7 +126,7 @@ namespace ReservationManagementApp.Controllers
                         }
                         TempData.Remove("Image");
                     }
-                    else if(TempData["Image"] != null)
+                    else if (TempData["Image"] != null)
                     {
                         service.Image = TempData["Image"].ToString();
                         TempData.Remove("Image");

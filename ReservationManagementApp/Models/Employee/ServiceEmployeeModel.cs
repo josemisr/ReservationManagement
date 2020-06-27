@@ -7,6 +7,6 @@ namespace ReservationManagementApp.Models.ServiceEmployeeModel
     {
         public ServiceEmployeeDto ServiceEmployee { get; set; }
         public IEnumerable<ServiceEmployeeDto> ServicesEmployeesList { get; set; }
-       
+
     }
 }

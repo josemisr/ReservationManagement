@@ -42,7 +42,7 @@ namespace ReservationManagementApp.Controllers
             serviceEmployeeModel.ServicesEmployeesList = servicesEmployeesList;
             serviceEmployeeModel.ServiceEmployee = new ServiceEmployeeDto();
 
-            string responseBodyEmployee= this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeApi/" + idEmployee.Value).GetAwaiter().GetResult();
+            string responseBodyEmployee = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/EmployeeApi/" + idEmployee.Value).GetAwaiter().GetResult();
             EmployeeDto employeeDto = JsonConvert.DeserializeObject<EmployeeDto>(responseBodyEmployee);
             serviceEmployeeModel.ServiceEmployee.IdEmployeeNavigation = employeeDto;
             serviceEmployeeModel.ServiceEmployee.IdEmployee = idEmployee.Value;
@@ -115,7 +115,7 @@ namespace ReservationManagementApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            string responseBodyServicesEmployeeList =await this._clientService.DeleteResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceEmployeeApi/" + id);
+            string responseBodyServicesEmployeeList = await this._clientService.DeleteResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceEmployeeApi/" + id);
             ServiceEmployeeDto serviceEmployee = JsonConvert.DeserializeObject<ServiceEmployeeDto>(responseBodyServicesEmployeeList);
             return RedirectToAction(nameof(Index), new
             {
@@ -127,7 +127,7 @@ namespace ReservationManagementApp.Controllers
         {
             string responseBodyServicesEmployeeList = this._clientService.GetResponse(this._configuration["AppSettings:ApiRest"] + "api/ServiceEmployeeApi/" + id).GetAwaiter().GetResult();
             ServiceEmployeeDto serviceEmployee = JsonConvert.DeserializeObject<ServiceEmployeeDto>(responseBodyServicesEmployeeList);
-            return serviceEmployee!= null;
+            return serviceEmployee != null;
         }
     }
 }

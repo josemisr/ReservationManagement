@@ -13,6 +13,6 @@ namespace ReservationServiceApi.Models
         public DateTime Birthday { get; set; }
         public int IdRole { get; set; }
         public string Password { get; set; }
-        public  RoleDto IdRoleNavigation { get; set; }
+        public RoleDto IdRoleNavigation { get; set; }
     }
 }

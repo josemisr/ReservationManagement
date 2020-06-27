@@ -12,7 +12,7 @@
       "UpstreamPathTemplate": "/api/ServiceApi",
       "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "TestKey",
+        "AuthenticationProviderKey": "Key",
         "AllowedScopes": []
       }
     },
@@ -28,7 +28,7 @@
       "UpstreamPathTemplate": "/api/ReservationApi",
       "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "TestKey",
+        "AuthenticationProviderKey": "Key",
         "AllowedScopes": []
       }
     },
@@ -45,7 +45,7 @@
       "UpstreamPathTemplate": "/api/EmployeeApi",
       "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "TestKey",
+        "AuthenticationProviderKey": "Key",
         "AllowedScopes": []
       }
     },
@@ -63,7 +63,7 @@
       "UpstreamPathTemplate": "/api/EmployeeShiftApi",
       "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "TestKey",
+        "AuthenticationProviderKey": "Key",
         "AllowedScopes": []
       }
     },
@@ -82,7 +82,7 @@
       "UpstreamPathTemplate": "/api/ServiceEmployeeApi",
       "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "TestKey",
+        "AuthenticationProviderKey": "Key",
         "AllowedScopes": []
       }
     },
@@ -98,7 +98,7 @@
       "UpstreamPathTemplate": "/api/ServiceApi/{everything}",
       "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "TestKey",
+        "AuthenticationProviderKey": "Key",
         "AllowedScopes": []
       }
     },
@@ -114,7 +114,7 @@
       "UpstreamPathTemplate": "/api/ReservationApi/{everything}",
       "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "TestKey",
+        "AuthenticationProviderKey": "Key",
         "AllowedScopes": []
       }
     },
@@ -131,7 +131,7 @@
       "UpstreamPathTemplate": "/api/EmployeeApi/{everything}",
       "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "TestKey",
+        "AuthenticationProviderKey": "Key",
         "AllowedScopes": []
       }
     },
@@ -149,7 +149,7 @@
       "UpstreamPathTemplate": "/api/EmployeeShiftApi/{everything}",
       "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "TestKey",
+        "AuthenticationProviderKey": "Key",
         "AllowedScopes": []
       }
     },
@@ -168,7 +168,7 @@
       "UpstreamPathTemplate": "/api/ServiceEmployeeApi/{everything}",
       "UpstreamHttpMethod": [ "Post", "Get", "Put", "Delete" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "TestKey",
+        "AuthenticationProviderKey": "Key",
         "AllowedScopes": []
       }
     },

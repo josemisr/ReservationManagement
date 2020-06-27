@@ -33,7 +33,7 @@ namespace Prueba
             services.AddControllers();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-             .AddJwtBearer("TestKey", options =>
+             .AddJwtBearer("Key", options =>
              {
                  options.TokenValidationParameters = new TokenValidationParameters()
                  {

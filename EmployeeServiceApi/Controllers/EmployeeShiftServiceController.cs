@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EmployeeServiceApi.Controllers
 {
     [Route("[controller]")]
-    [Authorize(AuthenticationSchemes = "TestKey")]
+    [Authorize(AuthenticationSchemes = "Key")]
     [ApiController]
     public class EmployeeShiftServiceController : ControllerBase
     {

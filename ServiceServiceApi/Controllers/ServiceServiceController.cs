@@ -7,7 +7,7 @@ using ServiceServiceApi.Models;
 namespace ServiceServiceApi.Controllers
 {
     [Route("[controller]")]
-    [Authorize(AuthenticationSchemes = "TestKey")]
+    [Authorize(AuthenticationSchemes = "Key")]
     [ApiController]
     public class ServiceServiceController : ControllerBase
     {
