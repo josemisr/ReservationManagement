@@ -1,13 +1,14 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using DataAccess.Models;
-using ServiceServiceApi.Models;
+using FunctionsService.Models;
 
-namespace ServiceServiceApi
+namespace AccountServiceApi
 {
     public class AutoMapperProfile : Profile
     {
         public AutoMapperProfile()
-        {      
+        {
             CreateMap<Services, ServiceDto>();
             CreateMap<ServiceDto, Services>();
         }

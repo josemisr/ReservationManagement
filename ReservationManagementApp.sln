@@ -9,13 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiGateway", "ApiGateway\ApiGateway.csproj", "{3CC86D93-7317-4F36-BD27-97493A5D1B7E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceServiceApi", "ServiceServiceApi\ServiceServiceApi.csproj", "{AB065670-3D4E-4790-BC03-1C159820B719}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReservationServiceApi", "ReservationServiceApi\ReservationServiceApi.csproj", "{D1855452-CDB2-4D1D-B2CB-8E71595BB768}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeServiceApi", "EmployeeServiceApi\EmployeeServiceApi.csproj", "{99E5979E-F97A-4CE5-B12B-EA6EC9799D48}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionsUser", "FunctionsUser\FunctionsUser.csproj", "{3DAD3FA6-4E5C-4BC4-A03A-0956B736F664}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionsService", "FunctionsService\FunctionsService.csproj", "{820D8908-004E-48C1-B473-6F1B84B82DD1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,6 @@ Global
 		{3CC86D93-7317-4F36-BD27-97493A5D1B7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CC86D93-7317-4F36-BD27-97493A5D1B7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CC86D93-7317-4F36-BD27-97493A5D1B7E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AB065670-3D4E-4790-BC03-1C159820B719}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB065670-3D4E-4790-BC03-1C159820B719}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB065670-3D4E-4790-BC03-1C159820B719}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB065670-3D4E-4790-BC03-1C159820B719}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D1855452-CDB2-4D1D-B2CB-8E71595BB768}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D1855452-CDB2-4D1D-B2CB-8E71595BB768}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1855452-CDB2-4D1D-B2CB-8E71595BB768}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +47,10 @@ Global
 		{3DAD3FA6-4E5C-4BC4-A03A-0956B736F664}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DAD3FA6-4E5C-4BC4-A03A-0956B736F664}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DAD3FA6-4E5C-4BC4-A03A-0956B736F664}.Release|Any CPU.Build.0 = Release|Any CPU
+		{820D8908-004E-48C1-B473-6F1B84B82DD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{820D8908-004E-48C1-B473-6F1B84B82DD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{820D8908-004E-48C1-B473-6F1B84B82DD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{820D8908-004E-48C1-B473-6F1B84B82DD1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

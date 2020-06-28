@@ -1,12 +1,20 @@
 {
   "ReRoutes": [
     {
-      "DownstreamPathTemplate": "/ServiceService",
-      "DownstreamScheme": "https",
+      //"DownstreamPathTemplate": "/ServiceService",
+      //"DownstreamScheme": "https",
+      //"DownstreamHostAndPorts": [
+      //  {
+      //    "Host": "localhost",
+      //    "Port": 44303
+      //  }
+      //],
+      "DownstreamPathTemplate": "/api/ServiceFunctionApi",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44303
+          "Port": 7071
         }
       ],
       "UpstreamPathTemplate": "/api/ServiceApi",
@@ -87,12 +95,20 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/ServiceService/{everything}",
-      "DownstreamScheme": "https",
+      //"DownstreamPathTemplate": "/ServiceService/{everything}",
+      //"DownstreamScheme": "https",
+      //"DownstreamHostAndPorts": [
+      //  {
+      //    "Host": "localhost",
+      //    "Port": 44303
+      //  }
+      //],
+      "DownstreamPathTemplate": "/api/ServiceFunctionApi/{everything}",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44303
+          "Port": 7071
         }
       ],
       "UpstreamPathTemplate": "/api/ServiceApi/{everything}",

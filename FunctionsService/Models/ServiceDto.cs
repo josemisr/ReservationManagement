@@ -1,4 +1,4 @@
-﻿namespace ServiceServiceApi.Models
+﻿namespace FunctionsService.Models
 {
     public class ServiceDto
     {
