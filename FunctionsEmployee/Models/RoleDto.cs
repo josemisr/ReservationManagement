@@ -1,4 +1,4 @@
-﻿namespace EmployeeServiceApi.Models
+﻿namespace FunctionsEmployee.Models
 {
     public class RoleDto
     {

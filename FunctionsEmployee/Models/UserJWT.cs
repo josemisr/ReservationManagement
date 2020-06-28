@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace EmployeeServiceApi.Models
+namespace FunctionsEmployees.Models
 {
-    public class UserSimpleDto
+    public class UserJWT
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -12,6 +12,7 @@ namespace EmployeeServiceApi.Models
         public string Email { get; set; }
         public DateTime Birthday { get; set; }
         public int IdRole { get; set; }
+        public string Rol { get; set; }
         public string Password { get; set; }
     }
 }

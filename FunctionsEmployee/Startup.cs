@@ -1,11 +1,12 @@
-﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+﻿
 using AutoMapper;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using System.Reflection;
-using AccountServiceApi;
 
-[assembly: FunctionsStartup(typeof(FunctionsServices.Startup))]
 
-namespace FunctionsServices
+[assembly: FunctionsStartup(typeof(FunctionsEmployee.Startup))]
+
+namespace FunctionsEmployee
 {
     public class Startup : FunctionsStartup
     {

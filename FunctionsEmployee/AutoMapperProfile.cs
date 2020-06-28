@@ -1,8 +1,9 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using DataAccess.Models;
-using EmployeeServiceApi.Models;
+using FunctionsEmployee.Models;
 
-namespace EmployeeServiceApi
+namespace FunctionsEmployee
 {
     public class AutoMapperProfile : Profile
     {

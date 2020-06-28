@@ -1,14 +1,6 @@
 {
   "ReRoutes": [
     {
-      //"DownstreamPathTemplate": "/ServiceService",
-      //"DownstreamScheme": "https",
-      //"DownstreamHostAndPorts": [
-      //  {
-      //    "Host": "localhost",
-      //    "Port": 44303
-      //  }
-      //],
       "DownstreamPathTemplate": "/api/ServiceFunctionApi",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -42,12 +34,12 @@
     },
 
     {
-      "DownstreamPathTemplate": "/EmployeeService",
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/api/EmployeeFunctionApi",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44310
+          "Port": 7073
         }
       ],
       "UpstreamPathTemplate": "/api/EmployeeApi",
@@ -57,15 +49,13 @@
         "AllowedScopes": []
       }
     },
-
-
     {
-      "DownstreamPathTemplate": "/EmployeeShiftService",
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/api/EmployeeShiftFunctionApi",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44310
+          "Port": 7073
         }
       ],
       "UpstreamPathTemplate": "/api/EmployeeShiftApi",
@@ -75,16 +65,13 @@
         "AllowedScopes": []
       }
     },
-
-
-
     {
-      "DownstreamPathTemplate": "/ServiceEmployeeService",
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/api/ServiceEmployeeFunctionApi",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44310
+          "Port": 7073
         }
       ],
       "UpstreamPathTemplate": "/api/ServiceEmployeeApi",
@@ -95,14 +82,6 @@
       }
     },
     {
-      //"DownstreamPathTemplate": "/ServiceService/{everything}",
-      //"DownstreamScheme": "https",
-      //"DownstreamHostAndPorts": [
-      //  {
-      //    "Host": "localhost",
-      //    "Port": 44303
-      //  }
-      //],
       "DownstreamPathTemplate": "/api/ServiceFunctionApi/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -136,12 +115,12 @@
     },
 
     {
-      "DownstreamPathTemplate": "/EmployeeService/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/api/EmployeeFunctionApi/{everything}",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44310
+          "Port": 7073
         }
       ],
       "UpstreamPathTemplate": "/api/EmployeeApi/{everything}",
@@ -154,12 +133,12 @@
 
 
     {
-      "DownstreamPathTemplate": "/EmployeeShiftService/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/EmployeeShiftFunctionApi/{everything}",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44310
+          "Port": 7073
         }
       ],
       "UpstreamPathTemplate": "/api/EmployeeShiftApi/{everything}",
@@ -169,16 +148,13 @@
         "AllowedScopes": []
       }
     },
-
-
-
     {
-      "DownstreamPathTemplate": "/ServiceEmployeeService/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/api/ServiceEmployeeFunctionApi/{everything}",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44310
+          "Port": 7073
         }
       ],
       "UpstreamPathTemplate": "/api/ServiceEmployeeApi/{everything}",
@@ -189,14 +165,6 @@
       }
     },
     {
-      //"DownstreamPathTemplate": "/AccountService",
-      //"DownstreamScheme": "https",
-      //"DownstreamHostAndPorts": [
-      //  {
-      //    "Host": "localhost",
-      //    "Port": 44311
-      //  }
-      //],
       "DownstreamPathTemplate": "/api/AccountFunctionApi",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -210,14 +178,6 @@
     },
 
     {
-      //"DownstreamPathTemplate": "/AccountService/{everything}",
-      //"DownstreamScheme": "https",
-      //"DownstreamHostAndPorts": [
-      //  {
-      //    "Host": "localhost",
-      //    "Port": 44311
-      //  }
-      //],
       "DownstreamPathTemplate": "/api/AccountFunctionApi/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

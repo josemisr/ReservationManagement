@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace EmployeeServiceApi.Models
+namespace FunctionsEmployee.Models
 {
-    public class EmployeeShiftDto
+    public class EmployeeShiftSimpleDto
     {
         public int Id { get; set; }
         public int IdEmployee { get; set; }
