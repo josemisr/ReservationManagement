@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ReservationServiceApi.Models
+namespace FunctionsReservation.Models
 {
     public class EmployeeDto
     {

@@ -1,8 +1,9 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using DataAccess.Models;
-using ReservationServiceApi.Models;
+using FunctionsReservation.Models;
 
-namespace ReservationServiceApi
+namespace FunctionsReservation
 {
     public class AutoMapperProfile : Profile
     {

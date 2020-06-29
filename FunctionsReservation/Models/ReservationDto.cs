@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ReservationServiceApi.Models
+namespace FunctionsReservation.Models
 {
     public class ReservationDto
     {

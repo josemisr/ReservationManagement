@@ -17,12 +17,12 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/ReservationService",
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/api/ReservationFunctionApi",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44308
+          "Port": 7072
         }
       ],
       "UpstreamPathTemplate": "/api/ReservationApi",
@@ -98,12 +98,12 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/ReservationService/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/api/ReservationFunctionApi/{everything}",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44308
+          "Port": 7072
         }
       ],
       "UpstreamPathTemplate": "/api/ReservationApi/{everything}",

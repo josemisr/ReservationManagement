@@ -1,4 +1,4 @@
-﻿namespace ReservationServiceApi.Models
+﻿namespace FunctionsReservation.Models
 {
     public class ServiceEmployeeSimpleDto
     {
