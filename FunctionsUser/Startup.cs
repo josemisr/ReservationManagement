@@ -3,11 +3,10 @@ using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
 using System.Reflection;
-using AccountServiceApi;
 
-[assembly: FunctionsStartup(typeof(MyNamespace.Startup))]
+[assembly: FunctionsStartup(typeof(FunctionsUser.Startup))]
 
-namespace MyNamespace
+namespace FunctionsUser
 {
     public class Startup : FunctionsStartup
     {

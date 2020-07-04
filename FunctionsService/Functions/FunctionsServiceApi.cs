@@ -8,7 +8,6 @@ using FunctionsService.Models;
 using System.Collections.Generic;
 using DataAccess.Models;
 using System.Text.Json;
-using FunctionsServices;
 using System.Net.Http;
 
 namespace FunctionsService.Functions
@@ -56,6 +55,12 @@ namespace FunctionsService.Functions
         public async Task<IActionResult> AddService(
             [HttpTrigger(AuthorizationLevel.Function, "Post", Route = "ServiceFunctionApi")]HttpRequestMessage req, ExecutionContext context)
         {
+            /*Validate JWT*/
+            if ((SecurityJwt.ValidateTokenWithRoleAsync(req.Headers.Authorization, context.FunctionAppDirectory, "Admin")) == null)
+            {
+                return new UnauthorizedResult();
+            }
+            /*Code*/
             var content = await req.Content.ReadAsStringAsync();
             ServiceDto servicesDto = JsonSerializer.Deserialize<ServiceDto>(content);
             Services servicesDb = _mapper.Map<ServiceDto, Services>(servicesDto);

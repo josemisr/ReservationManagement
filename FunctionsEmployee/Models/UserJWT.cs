@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FunctionsEmployees.Models
+namespace FunctionsEmployee.Models
 {
     public class UserJWT
     {

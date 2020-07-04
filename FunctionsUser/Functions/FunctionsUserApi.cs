@@ -16,10 +16,9 @@ using FunctionsUser.Models;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
-using AccountServiceApi;
 using AutoMapper;
 
-namespace FunctionUserApi
+namespace FunctionsUser
 {
     public class FunctionsUserApi
     {

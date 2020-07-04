@@ -3,7 +3,7 @@ using AutoMapper;
 using DataAccess.Models;
 using FunctionsService.Models;
 
-namespace AccountServiceApi
+namespace FunctionsService
 {
     public class AutoMapperProfile : Profile
     {

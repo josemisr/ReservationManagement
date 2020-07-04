@@ -1,9 +1,6 @@
 ﻿using FunctionsService.Models;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Protocols;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -11,7 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 
-namespace FunctionsServices
+namespace FunctionsService
 {
     public static class SecurityJwt
     {
@@ -20,7 +17,7 @@ namespace FunctionsServices
             if (value?.Scheme != "Bearer")
                 return null;
 
-            var config = new ConfigurationBuilder()
+            var configFile = new ConfigurationBuilder()
             .SetBasePath(context)
             .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
             .AddEnvironmentVariables()
@@ -29,14 +26,14 @@ namespace FunctionsServices
             var validationParameter = new TokenValidationParameters
             {
                 RequireSignedTokens = true,
-                ValidAudience = config["JWT:Audience"],
+                ValidAudience = configFile["JWT:Audience"],
                 ValidateAudience = true,
-                ValidIssuer = config["JWT:Issuer"],
+                ValidIssuer = configFile["JWT:Issuer"],
                 ValidateIssuer = true,
                 ValidateIssuerSigningKey = true,
                 ValidateLifetime = true,
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(config["JWT:SecretKey"]))
+                    Encoding.UTF8.GetBytes(configFile["JWT:SecretKey"]))
             };
 
             ClaimsPrincipal result = null;
