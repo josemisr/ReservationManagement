@@ -14,6 +14,8 @@ using SolucionMonolitica.Filters;
 using ReservationManagementApp.Authorize;
 using Microsoft.AspNetCore.Authorization;
 using ReservationManagementApp.Enum;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace ReservationManagementApp
 {
@@ -77,8 +79,13 @@ namespace ReservationManagementApp
             app.UseAuthentication();
             app.UseSession();//Orden importante, para que pueda ser usada en el Authorization (policy)
             app.UseAuthorization();
-           
-           
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("en-GB"),
+                SupportedCultures = new[] { new CultureInfo("en-GB") },
+                SupportedUICultures = new[] { new CultureInfo("en-GB") }
+            });
 
             app.UseEndpoints(endpoints =>
             {

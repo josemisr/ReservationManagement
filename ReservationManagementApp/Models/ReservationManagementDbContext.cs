@@ -56,7 +56,7 @@ namespace ReservationManagementApp.Models
                 entity.HasOne(d => d.IdEmployeeNavigation)
                     .WithMany(p => p.EmployeesShifts)
                     .HasForeignKey(d => d.IdEmployee)
-                    .OnDelete(DeleteBehavior.Cascade)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKEmployeesShifts_Employees");
             });
 
@@ -85,22 +85,22 @@ namespace ReservationManagementApp.Models
 
             modelBuilder.Entity<Roles>(entity =>
             {
-                entity.Property(e => e.Descripción).HasMaxLength(250);
+                entity.Property(e => e.Description).HasMaxLength(250);
 
                 entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Services>(entity =>
             {
-                entity.Property(e => e.Description)
-                    .HasMaxLength(250)
-                    .IsFixedLength();
+                entity.Property(e => e.Description).HasMaxLength(250);
 
                 entity.Property(e => e.Image).HasMaxLength(250);
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(30);
+
+                entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
             });
 
             modelBuilder.Entity<ServicesEmployees>(entity =>
