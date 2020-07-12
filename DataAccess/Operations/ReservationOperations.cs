@@ -22,7 +22,8 @@ namespace DataAccess.Operations
         }
         public Reservations DeleteReservation(int id)
         {
-            var reservation = GetByPk(id);
+            Reservations reservation = GetByPk(id);
+            if (reservation == null) { return null; }
             db.Remove(reservation);
             db.SaveChanges();
             return reservation;

@@ -22,7 +22,7 @@ namespace DataAccess.Operations
         }
         public Employees DeleteEmployee(int id)
         {
-            var employee = GetByPk(id);
+            Employees employee = GetByPk(id);
             var servicesEmployeesList = db.ServicesEmployees.Where(elem => elem.IdEmployee == id);
             var employeesShiftsList = db.EmployeesShifts.Where(elem => elem.IdEmployee == id);
             var reservationsList = db.Reservations.Where(elem => elem.IdEmployee == id);
@@ -38,7 +38,7 @@ namespace DataAccess.Operations
             {
                 db.Remove(reservation);
             }
-
+            if (employee == null) { return null; }
             db.Remove(employee);
             db.SaveChanges();
             return employee;
