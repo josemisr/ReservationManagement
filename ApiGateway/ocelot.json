@@ -133,7 +133,7 @@
 
 
     {
-      "DownstreamPathTemplate": "/EmployeeShiftFunctionApi/{everything}",
+      "DownstreamPathTemplate": "/api/EmployeeShiftFunctionApi/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

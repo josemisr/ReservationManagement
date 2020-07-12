@@ -9,13 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiGateway", "ApiGateway\ApiGateway.csproj", "{3CC86D93-7317-4F36-BD27-97493A5D1B7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionsUser", "FunctionsUser\FunctionsUser.csproj", "{3DAD3FA6-4E5C-4BC4-A03A-0956B736F664}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionsUser", "FunctionsUser\FunctionsUser.csproj", "{3DAD3FA6-4E5C-4BC4-A03A-0956B736F664}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionsService", "FunctionsService\FunctionsService.csproj", "{820D8908-004E-48C1-B473-6F1B84B82DD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionsService", "FunctionsService\FunctionsService.csproj", "{820D8908-004E-48C1-B473-6F1B84B82DD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionsEmployee", "FunctionsEmployee\FunctionsEmployee.csproj", "{9FDDBF82-7C9E-418C-8A4C-12010B0BAD24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionsEmployee", "FunctionsEmployee\FunctionsEmployee.csproj", "{9FDDBF82-7C9E-418C-8A4C-12010B0BAD24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionsReservation", "FunctionsReservation\FunctionsReservation.csproj", "{37736975-F128-4702-839E-0E57A33BAD19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionsReservation", "FunctionsReservation\FunctionsReservation.csproj", "{37736975-F128-4702-839E-0E57A33BAD19}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
