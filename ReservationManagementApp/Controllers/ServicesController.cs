@@ -186,6 +186,5 @@ namespace ReservationManagementApp.Controllers
             return service != null;
         }
 
-
     }
 }

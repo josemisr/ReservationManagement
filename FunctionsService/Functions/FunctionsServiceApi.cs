@@ -26,7 +26,7 @@ namespace FunctionsService.Functions
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "ServiceFunctionApi")] HttpRequestMessage req,  ExecutionContext context)
         {
             /*Validate JWT*/
-            if ((SecurityJwt.ValidateTokenWithRoleAsync(req.Headers.Authorization, context.FunctionAppDirectory, "Admin")) == null)
+            if ((SecurityJwt.ValidateToken(req.Headers.Authorization, context.FunctionAppDirectory)) == null)
             {
                 return new UnauthorizedResult();
             }
@@ -41,7 +41,7 @@ namespace FunctionsService.Functions
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "ServiceFunctionApi/{id:int}")] HttpRequestMessage req, int id, ExecutionContext context)
         {
             /*Validate JWT*/
-            if ((SecurityJwt.ValidateTokenWithRoleAsync(req.Headers.Authorization, context.FunctionAppDirectory, "Admin")) == null)
+            if ((SecurityJwt.ValidateToken(req.Headers.Authorization, context.FunctionAppDirectory)) == null)
             {
                 return new UnauthorizedResult();
             }
