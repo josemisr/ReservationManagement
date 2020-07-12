@@ -166,9 +166,22 @@ namespace ReservationManagementApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var services = await _context.Services.FindAsync(id);
-            _context.Services.Remove(services);
-            await _context.SaveChangesAsync();
+            Services services = _context.Services.Where(elem => elem.Id == id).Include(s => s.Reservations).Include(s => s.ServicesEmployees).FirstOrDefault();
+            if (services != null)
+            {
+                List<Reservations> reservationsList = services.Reservations.Where(elem => elem.IdService == id).ToList();
+                List<ServicesEmployees> servicesEmployeesList = services.ServicesEmployees.Where(elem => elem.IdService == id).ToList();
+                foreach (var servicesEmployee in servicesEmployeesList)
+                {
+                    _context.ServicesEmployees.Remove(servicesEmployee);
+                }
+                foreach (var reservation in reservationsList)
+                {
+                    _context.Reservations.Remove(reservation);
+                }
+                _context.Services.Remove(services);
+                await _context.SaveChangesAsync();
+            }
             return RedirectToAction(nameof(Index));
         }
 
@@ -176,7 +189,6 @@ namespace ReservationManagementApp.Controllers
         {
             return _context.Services.Any(e => e.Id == id);
         }
-
 
     }
 }

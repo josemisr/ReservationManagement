@@ -144,21 +144,25 @@ namespace ReservationManagementApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var employee = _context.Employees.Where(elem => elem.Id == id).Include(s => s.Reservations).Include(s => s.ServicesEmployees).Include(s => s.EmployeesShifts).FirstOrDefault();
-            foreach (Reservations reservation in employee.Reservations)
+            Employees employee = _context.Employees.Where(elem => elem.Id == id).Include(s => s.Reservations).Include(s => s.ServicesEmployees).Include(s => s.EmployeesShifts).FirstOrDefault();
+            if (employee != null)
             {
-                _context.Reservations.Remove(reservation);
+                foreach (Reservations reservation in employee.Reservations)
+                {
+                    _context.Reservations.Remove(reservation);
+                }
+                foreach (ServicesEmployees service in employee.ServicesEmployees)
+                {
+                    _context.ServicesEmployees.Remove(service);
+                }
+                foreach (EmployeesShifts shift in employee.EmployeesShifts)
+                {
+                    _context.EmployeesShifts.Remove(shift);
+                }
+
+                _context.Employees.Remove(employee);
+                _context.SaveChanges();
             }
-            foreach (ServicesEmployees service in employee.ServicesEmployees)
-            {
-                _context.ServicesEmployees.Remove(service);
-            }
-            foreach (EmployeesShifts shift in employee.EmployeesShifts)
-            {
-                _context.EmployeesShifts.Remove(shift);
-            }
-            _context.Employees.Remove(employee);
-            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 

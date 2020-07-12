@@ -123,12 +123,15 @@ namespace ReservationManagementApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var employeesShifts = await _context.EmployeesShifts.FindAsync(id);
-            _context.EmployeesShifts.Remove(employeesShifts);
-            await _context.SaveChangesAsync();
+            EmployeesShifts employeeShift = await _context.EmployeesShifts.FindAsync(id);
+            if (employeeShift != null)
+            {
+                _context.EmployeesShifts.Remove(employeeShift);
+                await _context.SaveChangesAsync();
+            }
             return RedirectToAction(nameof(Index), new
             {
-                idEmployee = employeesShifts.IdEmployee
+                idEmployee = id
             });
         }
 

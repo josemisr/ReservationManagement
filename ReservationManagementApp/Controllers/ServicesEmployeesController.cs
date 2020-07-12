@@ -99,8 +99,11 @@ namespace ReservationManagementApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var serviceEmployee = await _context.ServicesEmployees.FindAsync(id);
-            _context.ServicesEmployees.Remove(serviceEmployee);
-            await _context.SaveChangesAsync();
+            if (serviceEmployee != null)
+            {
+                _context.ServicesEmployees.Remove(serviceEmployee);
+                await _context.SaveChangesAsync();
+            }
             return RedirectToAction(nameof(Index), new
             {
                 idEmployee = serviceEmployee.IdEmployee
