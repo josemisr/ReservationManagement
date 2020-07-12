@@ -22,7 +22,8 @@ namespace DataAccess.Operations
         }
         public ServicesEmployees DeleteServiceemployee(int id)
         {
-            var serviceEmployee = GetByPk(id);
+            ServicesEmployees serviceEmployee = GetByPk(id);
+            if (serviceEmployee == null) { return null; }
             db.Remove(serviceEmployee);
             db.SaveChanges();
             return serviceEmployee;

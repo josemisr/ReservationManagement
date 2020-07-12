@@ -22,7 +22,8 @@ namespace DataAccess.Operations
         }
         public Employees DeleteEmployee(int id)
         {
-            var employee = GetByPk(id);
+            Employees employee = GetByPk(id);
+            if (employee == null) { return null; }
             var servicesEmployeesList = db.ServicesEmployees.Where(elem => elem.IdEmployee == id);
             var employeesShiftsList = db.EmployeesShifts.Where(elem => elem.IdEmployee == id);
             var reservationsList = db.Reservations.Where(elem => elem.IdEmployee == id);
