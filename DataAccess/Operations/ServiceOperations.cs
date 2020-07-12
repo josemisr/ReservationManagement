@@ -24,6 +24,7 @@ namespace DataAccess.Operations
         public Services DeleteService(int id)
         {
             var service = GetByPk(id);
+            if (service == null) { return null; }
             var servicesEmployeesList = db.ServicesEmployees.Where(elem => elem.IdService == id);
             var reservationsList = db.Reservations.Where(elem => elem.IdService == id);
             foreach (var servicesEmployee in servicesEmployeesList)

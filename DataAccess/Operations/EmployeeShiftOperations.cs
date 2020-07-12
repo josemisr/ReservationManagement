@@ -21,6 +21,7 @@ namespace DataAccess.Operations
         public EmployeesShifts DeleteEmployeeShift(int id)
         {
             var employeeShift = GetByPk(id);
+            if (employeeShift == null) { return null; }
             db.Remove(employeeShift);
             db.SaveChanges();
             return employeeShift;

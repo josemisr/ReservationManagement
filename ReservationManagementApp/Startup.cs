@@ -77,7 +77,7 @@ namespace ReservationManagementApp
             app.UseRouting();
 
             app.UseAuthentication();
-            app.UseSession();//Orden importante, para que pueda ser usada en el Authorization (policy)
+            app.UseSession();//Order important.
             app.UseAuthorization();
 
             app.UseRequestLocalization(new RequestLocalizationOptions
